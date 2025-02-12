@@ -1,0 +1,75 @@
+section {
+    display: flex;
+    flex-direction: column;
+}
+nav {
+    display: flex;
+    justify-content: space-evenly;
+}
+nav h2 {
+    padding-bottom: 5px;
+}
+nav h2.selected-role {
+    border-bottom: 2px solid #A7C7E7;
+}
+.filter-buttons {
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 20px;
+}
+.filter-buttons button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #ffffff;
+    color: #000000;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+.filter-buttons button.selected {
+    background-color: #A7C7E7;
+    color: #ffffff;
+}
+.filter-buttons button:not(.selected):hover {
+    background-color: #f1f1f1;
+}
+.package-cards {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+.package-cards .card {
+    width: 300px;
+    height: auto;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+.card h2 {
+    text-align: center;
+}
+.vertical-timeline-element-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+.custom-timeline .vertical-timeline-element-content {
+    padding: 10px 20px;
+}
+.custom-timeline .vertical-timeline-element-icon {
+    width: 20px;
+    height: 20px;
+    margin-left: -5px;
+}
+.custom-timeline .vertical-timeline-element::before {
+    background: #ddd;
+    width: 2px;
+    left: 5px;
+}
+.custom-icon {
+    width: 10px;
+    height: 10px;
+    background: rgb(33, 150, 243);
+    border-radius: 50%;
+}

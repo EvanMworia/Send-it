@@ -1,0 +1,123 @@
+{
+  "users": [
+    {
+      "UserID": 1,
+      "FullName": "Admin User",
+      "Email": "admin@sendit.com",
+      "Password": "1234",
+      "Phone": "+254700000001",
+      "Role": "Admin",
+      "CreatedAt": "2025-02-08T12:00:00Z",
+      "IsDeleted": false,
+      "id": "b273",
+      "ProfilePicture": "https://plus.unsplash.com/premium_photo-1689977968861-9c91dbb16049?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZSUyMHBpY3R1cmV8ZW58MHx8MHx8fDA%3D"
+    },
+    {
+      "UserID": 2,
+      "FullName": "Alice Doe",
+      "Email": "alice@sendit.com",
+      "Password": "1234",
+      "Phone": "+254700000002",
+      "Role": "User",
+      "CreatedAt": "2025-02-08T12:05:00Z",
+      "IsDeleted": false,
+      "id": "2a8c",
+      "ProfilePicture": "https://plus.unsplash.com/premium_photo-1689977968861-9c91dbb16049?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZSUyMHBpY3R1cmV8ZW58MHx8MHx8fDA%3D"
+    },
+    {
+      "UserID": 3,
+      "FullName": "Bob Smith",
+      "Email": "bob@sendit.com",
+      "Password": "1234",
+      "Phone": "+254700000003",
+      "Role": "User",
+      "CreatedAt": "2025-02-08T12:10:00Z",
+      "IsDeleted": false,
+      "id": "4b49"
+    },
+    {
+      "id": "529a",
+      "FullName": "Adrian Martin",
+      "Email": "adrian@gmail.com",
+      "Phone": "0700236967",
+      "Password": "adrian",
+      "Role": "User",
+      "CreatedAt": "2025-02-11T17:33:17.493Z",
+      "IsDeleted": false,
+      "ProfilePicture": ""
+    },
+    {
+      "id": "602f",
+      "FullName": "Jennifer Akinyi",
+      "Email": "jennifer@gmail.com",
+      "Phone": "0703236769",
+      "Password": "jenn",
+      "Role": "User",
+      "CreatedAt": "2025-02-11T17:59:46.453Z",
+      "IsDeleted": false,
+      "ProfilePicture": "https://media.istockphoto.com/id/1386479313/photo/happy-millennial-afro-american-business-woman-posing-isolated-on-white.webp?a=1&b=1&s=612x612&w=0&k=20&c=OnzQRmrTWj779-DI4_aEykdTKuwL-Ubphs1cdQ3tyxE="
+    }
+  ],
+  "parcels": [
+    {
+      "ParcelID": "19a1",
+      "SenderID": "2a8c",
+      "ReceiverID": "602f",
+      "SendingLocation": "Nairobi, Kenya",
+      "PickupLocation": "Mombasa, Kenya",
+      "Status": "Picked",
+      "CreatedAt": "2025-02-08T13:00:00Z",
+      "UpdatedAt": "2025-02-08T13:00:00Z",
+      "IsDeleted": false,
+      "id": "b846"
+    },
+    {
+      "ParcelID": "a716",
+      "SenderID": "2a8c",
+      "ReceiverID": "602f",
+      "SendingLocation": "Nairobi, Kenya",
+      "PickupLocation": "Mombasa, Kenya",
+      "Status": "Delivered",
+      "CreatedAt": "2025-02-11T10:00:00Z",
+      "UpdatedAt": "2025-02-11T10:00:00Z",
+      "IsDeleted": false,
+      "id": "a884"
+    },
+    {
+      "ParcelID": "a718",
+      "SenderID": "602f",
+      "ReceiverID": "2a8c",
+      "SendingLocation": "Nakuru, Kenya",
+      "PickupLocation": "Thika, Kenya",
+      "Status": "In Transit",
+      "CreatedAt": "2025-02-10T15:30:00Z",
+      "UpdatedAt": "2025-02-11T08:45:00Z",
+      "IsDeleted": false,
+      "id": "b4a0"
+    },
+    {
+      "ParcelID": "a816",
+      "SenderID": "602f",
+      "ReceiverID": "2a8c",
+      "SendingLocation": "Nakuru, Kenya",
+      "PickupLocation": "Thika, Kenya",
+      "Status": "Delivered",
+      "CreatedAt": "2025-02-09T09:20:00Z",
+      "UpdatedAt": "2025-02-11T07:10:00Z",
+      "IsDeleted": false,
+      "id": "70fe"
+    },
+    {
+      "ParcelID": "a817",
+      "SenderID": "4b49",
+      "ReceiverID": "2a8c",
+      "SendingLocation": "Nakuru, Kenya",
+      "PickupLocation": "Thika, Kenya",
+      "Status": "Pending",
+      "CreatedAt": "2025-02-09T09:20:00Z",
+      "UpdatedAt": "2025-02-11T07:10:00Z",
+      "IsDeleted": false,
+      "id": "4fd9"
+    }
+  ]
+}
