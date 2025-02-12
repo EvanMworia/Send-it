@@ -1,8 +1,8 @@
-USE databaseName
+USE SendIt
 GO
 CREATE OR ALTER PROCEDURE getUsers
 AS
 BEGIN
-SELECT * FROM Users
+SELECT * FROM Users WHERE IsDeleted = 0
 END
 GO

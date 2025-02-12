@@ -1,5 +1,14 @@
+POST http://localhost:5000/users/registerUser
+Content-Type: application/json
 
-GET http://localhost:3000/users
+{
+    "UserName":"Ivonne",
+    "Email":"Deleteme@example1.com",
+    "Password":"Test@2024"
+
+}
+
+GET http://localhost:5000/users/getAllUsers
 #-----GETS ALL THE users FROM THE DATABASE THAT EXIST
 
 ######

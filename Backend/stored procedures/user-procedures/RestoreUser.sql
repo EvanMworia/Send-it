@@ -1,0 +1,12 @@
+USE SendIt
+GO
+CREATE OR ALTER PROCEDURE RestoreUser(@UserId VARCHAR(255))
+AS
+BEGIN
+
+
+UPDATE Users 
+SET IsDeleted = 0 WHERE UserId=@UserId
+
+END
+GO

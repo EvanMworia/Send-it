@@ -1,0 +1,12 @@
+
+USE SendIt
+GO
+CREATE OR ALTER PROCEDURE GetUserById(@UserID VARCHAR(255))
+AS
+BEGIN
+
+SELECT * FROM Users WHERE UserID = @UserID
+
+END
+GO
+EXEC GetUserById @UserID = 6;

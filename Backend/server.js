@@ -2,7 +2,7 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import userRouter from './routes/userRoutes.js';
-import parcelRouter from './routes/parcelRoutes.js';
+// import parcelRouter from './routes/parcelRoutes.js';
 
 const app = express();
 
@@ -12,8 +12,9 @@ app.use(express.json()); // Parse JSON requests
 
 // Routes
 app.use('/users', userRouter);
-app.use('/parcels', parcelRouter);
+
+// app.use('/parcels', parcelRouter);
 
 // Start Server
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
