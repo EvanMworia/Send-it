@@ -1,0 +1,23 @@
+CREATE TABLE Users (
+    UserID UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    FullName NVARCHAR(100),
+    Email NVARCHAR(255) UNIQUE NOT NULL,
+    PasswordHash NVARCHAR(255) NOT NULL,
+    ProfilePicture NVARCHAR(255),
+    Phone NVARCHAR(20),
+    Role NVARCHAR(10) CHECK (Role IN ('User', 'Admin')),
+    CreatedAt DATETIME DEFAULT GETDATE(),
+    IsDeleted BIT DEFAULT 0
+);
+
+CREATE TABLE Parcels (
+    ParcelID UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    SenderID UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Users(UserID),
+    ReceiverID UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Users(UserID),
+    SendingLocation NVARCHAR(255),
+    PickupLocation NVARCHAR(255),
+    Status NVARCHAR(50) CHECK (Status IN ('Pending', 'In Transit', 'Delivered', 'Picked')),
+    CreatedAt DATETIME DEFAULT GETDATE(),
+    UpdatedAt DATETIME DEFAULT GETDATE(),
+    IsDeleted BIT DEFAULT 0
+);

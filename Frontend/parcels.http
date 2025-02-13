@@ -1,5 +1,14 @@
 
-GET http://localhost:3000/parcels
+GET http://localhost:4000/parcels/
 #-----GETS ALL THE parcels FROM THE DATABASE THAT EXIST
 
 ######
+ POST http://localhost:4000/parcels/
+Content-Type: application/json
+
+{
+"senderId": "0e429887-d502-4957-a565-36897c06809f",
+"receiverId": "5a8127ac-7621-48bc-81f5-896d22bfe183",
+"sendingLocation": "Nairobi",
+"pickupLocation": "Kisumu"
+}
