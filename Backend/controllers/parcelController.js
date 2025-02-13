@@ -139,7 +139,7 @@ async function updateParcel(req, res) {
 		});
 
 		console.log('Procedure Result:', results);
-
+		const parcelDetails = (await db.executeProcedure('sp_GetParcelByID', { parcelId })).recordset;
 		// Check if the update was successful
 		if (results.rowsAffected[0] > 0) {
 			res.status(200).json({
