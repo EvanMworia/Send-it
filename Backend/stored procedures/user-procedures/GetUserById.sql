@@ -1,12 +1,12 @@
 
-USE SendIt
+USE SENDITDB
 GO
 CREATE OR ALTER PROCEDURE GetUserById(@UserID VARCHAR(255))
 AS
 BEGIN
 
-SELECT * FROM Users WHERE UserID = @UserID
+SELECT * FROM Users WHERE UserID = @UserID AND IsDeleted = 0 
 
 END
 GO
-EXEC GetUserById @UserID = 6;
+
