@@ -1,8 +1,0 @@
-USE databaseName
-GO
-CREATE OR ALTER PROCEDURE getParcels
-AS
-BEGIN
-SELECT * FROM Parcels
-END
-GO

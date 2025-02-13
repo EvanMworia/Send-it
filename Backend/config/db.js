@@ -1,6 +1,8 @@
 import mssql from 'mssql';
 import path from 'path';
 import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 const sqlConfig = {
@@ -18,3 +20,16 @@ const sqlConfig = {
 		trustServerCertificate: true, // change to true for local dev / self-signed certs
 	},
 };
+
+async function test() {
+	try {
+		const pool = await mssql.connect(sqlConfig);
+		const result = await pool.request().query('SELECT * FROM Parcels');
+		console.log(result.recordset);
+		
+	} catch (error) {
+		console.error(error);
+	}
+}
+// test();
+export { sqlConfig };
