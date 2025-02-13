@@ -8,7 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 //GETTING THE LOCATION OF THE DIRECTORY WE ARE IN(config)
 const __dirname = path.dirname(__filename);
 //POINTING TO THE .ENV FILE SO WE CAN EXTRACT THE VARIABLES IIN THERE
-import { fileURLToPath } from 'url';
+
 // const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
@@ -39,4 +39,4 @@ async function test() {
 	}
 }
 // test();
-export { sqlConfig };
+//export { sqlConfig };
