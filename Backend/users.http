@@ -1,5 +1,35 @@
+POST http://localhost:5000/users/registerUser
+Content-Type: application/json
 
-GET http://localhost:3000/users
+{
+    "FullName":"Evan",
+    "Email":"evannji99@gmail.com",
+    "Password":"Test@2024",
+    "ProfilePicture": "sbcbjs",
+    "Phone": "sncis",
+    "Role": "Admin" 
+
+}
+####
+POST http://localhost:5000/users/login
+Content-Type: application/json
+
+{
+    
+    "Email":"Test1@example1.com",
+    "Password":"Test@2024"
+
+}
+####
+GET http://localhost:5000/users/getAllUsers
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJkYTJjMDk5Mi1jYTJhLTRlNmItODA0ZS05YTAyMDg3ZWVhNDUiLCJyb2xlIjoiQWRtaW4iLCJpYXQiOjE3Mzk0NDA1NDYsImV4cCI6MTczOTQ0NDE0Nn0.qLA9X3yua8_NjKD8ufQGyHduPZoBaJ2_JwQOZnIVSnI
 #-----GETS ALL THE users FROM THE DATABASE THAT EXIST
 
 ######
+
+GET http://localhost:5000/users/getUserById/e48b3296-6ca4-4c95-8f47-202c755369fd
+# ----GET A USER BY ID
+
+
+######
+GET http://localhost:5000/users/getUserByEmail/Deleteme@example1.com

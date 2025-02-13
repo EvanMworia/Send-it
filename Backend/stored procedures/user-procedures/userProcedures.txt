@@ -1,0 +1,11 @@
+1- CreateNewUser ?
+2-GetAllUsers ?
+3-GetUserById ?
+4-UpdateUser ? UPSERT
+5-DeleteUsers ?
+
+------------AFTER CRUD-----------
+
+1- GetParcelsSent
+2- GetParcelsReceived
+3-GetParcelsInTransit
