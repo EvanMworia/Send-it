@@ -40,11 +40,11 @@ export async function sendWelcomeEmail(recipient, appUserName) {
 		console.error('Error while sending email', error);
 	}
 }
-export async function sendUpdateEmail(parcelId, status) {
+export async function sendUpdateEmail(parcelSender, parcelReceipient, parcelId, status) {
 	try {
 		await transporter.sendMail({
 			from: `SendIt Team <${process.env.EMAIL_USER}>`,
-			to: `${recipient}`,
+			to: `<${parcelReceipient}>, <${parcelSender}>`,
 			subject: `Parcel Update`,
 			html: `
                 <h1>News on your parcel!</h1>
