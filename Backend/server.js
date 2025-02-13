@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import express, { json } from 'express';
 import cors from 'cors';
-// import userRouter from './routes/userRoutes.js';
+import userRouter from './routes/userRoutes.js';
 import parcelRouter from './routes/parcelRoutes.js';
 
 const app = express();
@@ -13,9 +13,9 @@ app.use(cors({ origin: 'http://localhost:3001', credentials: true }));
 app.use(express.urlencoded({ extended: true })); // Middleware to parse form data
 
 // Routes
-// app.use('/users', userRouter);
+app.use('/users', userRouter);
 
-// app.use('/', parcelRouter);
+app.use('/', parcelRouter);
 
 // Start Server
 const PORT = process.env.PORT || 5000;

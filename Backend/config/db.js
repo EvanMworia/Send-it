@@ -9,7 +9,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 //POINTING TO THE .ENV FILE SO WE CAN EXTRACT THE VARIABLES IIN THERE
 import { fileURLToPath } from 'url';
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+// const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 export const sqlConfig = {
@@ -28,23 +28,6 @@ export const sqlConfig = {
 		trustServerCertificate: true, // change to true for local dev / self-signed certs
 	},
 };
-
-// HIVI NDIO UTAKUWA UNAEXECUTE HIZO PROCEDURES KWA CODE
-//REMOVE THIS CODE HAPA AFTER FINDING WHERE YOU NEED TO USE IT AMA JUST COMMENT IT
-//OFCOURSE FUNCTION NAME ITACHANGE
-
-async function run() {
-	let pool = await mssql.connect(sqlConfig);
-	const result = await pool.query`select * from Users`;
-	console.dir(result);
-	// let users = (await pool.request().execute('A CERTAIN STORED PROCEDURE')).recordset;
-	// let parcels = (await pool.request().execute('A CERTAIN STORED PROCEDURE')).recordset;
-	// console.log(users);
-	// console.log(parcels);
-	console.log('The users we found are', result.recordset);
-}
-
-//run();
 
 async function test() {
 	try {
