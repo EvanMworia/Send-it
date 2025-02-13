@@ -41,4 +41,4 @@ async function run() {
 	console.log('The users we found are', result.recordset);
 }
 
-// run();
+//run();
