@@ -1,0 +1,66 @@
+.process-section {
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.process-container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.process-container h2 {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  color: #333;
+  text-align: center;
+}
+
+.process-container form {
+  display: flex;
+  flex-direction: column;
+}
+
+.process-container label {
+  font-size: 0.9rem;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+.process-container input,
+.process-container select {
+  padding: 10px;
+  width: 100%;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.process-container button {
+  padding: 12px;
+  font-size: 1rem;
+  color: #fff;
+  background-color: #475be8;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.process-container button:hover {
+  background-color: #3748c8;
+}
+
+.process-container .error-message {
+  color: #e74c3c;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+}
+
+.process-container .success-message {
+  color: #27ae60;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+}

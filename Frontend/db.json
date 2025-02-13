@@ -60,26 +60,14 @@
   ],
   "parcels": [
     {
-      "ParcelID": "19a1",
-      "SenderID": "2a8c",
-      "ReceiverID": "602f",
-      "SendingLocation": "Nairobi, Kenya",
-      "PickupLocation": "Mombasa, Kenya",
-      "Status": "Picked",
-      "CreatedAt": "2025-02-08T13:00:00Z",
-      "UpdatedAt": "2025-02-08T13:00:00Z",
-      "IsDeleted": false,
-      "id": "b846"
-    },
-    {
       "ParcelID": "a716",
       "SenderID": "2a8c",
       "ReceiverID": "602f",
       "SendingLocation": "Nairobi, Kenya",
       "PickupLocation": "Mombasa, Kenya",
-      "Status": "Delivered",
+      "Status": "Picked",
       "CreatedAt": "2025-02-11T10:00:00Z",
-      "UpdatedAt": "2025-02-11T10:00:00Z",
+      "UpdatedAt": "2025-02-13T06:07:41.902Z",
       "IsDeleted": false,
       "id": "a884"
     },
@@ -118,6 +106,17 @@
       "UpdatedAt": "2025-02-11T07:10:00Z",
       "IsDeleted": false,
       "id": "4fd9"
+    },
+    {
+      "id": "b475",
+      "SenderID": "2a8c",
+      "ReceiverID": "602f",
+      "SendingLocation": "Nakuru, Kenya",
+      "PickupLocation": "Nairobi, Kenya",
+      "Status": "Pending",
+      "CreatedAt": "2025-02-12T17:35:48.214Z",
+      "UpdatedAt": "2025-02-12T17:35:48.214Z",
+      "IsDeleted": false
     }
   ]
 }

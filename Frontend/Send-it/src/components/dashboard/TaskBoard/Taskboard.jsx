@@ -4,6 +4,7 @@ import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeli
 import 'react-vertical-timeline-component/style.min.css';
 import './Taskboard.css';
 import emptybox from "../../../assets/images/empty-preview.png";
+import Location from '../../Location/Location';
 
 const Taskboard = () => {
   const [selectedFilter, setSelectedFilter] = useState('All');
@@ -12,6 +13,8 @@ const Taskboard = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedParcel, setSelectedParcel] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleFilterClick = (filter) => {
     setSelectedFilter(filter);
@@ -43,6 +46,16 @@ const Taskboard = () => {
   const getUserNameById = (id) => {
     const user = users.find((user) => user.id === id);
     return user ? user.FullName : 'Unknown';
+  };
+
+  const handleParcelClick = (parcel) => {
+    setSelectedParcel(parcel);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedParcel(null);
   };
 
   const filteredPackages = packages.filter((pkg) => {
@@ -95,7 +108,7 @@ const Taskboard = () => {
           </div>
         ) : (
           filteredPackages.map((pkg) => (
-            <div className="card" key={pkg.ParcelID}>
+            <div className="card" key={pkg.ParcelID} onClick={() => handleParcelClick(pkg)}>
               <h2>Parcel</h2>
               <VerticalTimeline layout="1-column" className="custom-timeline">
                 <VerticalTimelineElement
@@ -119,6 +132,13 @@ const Taskboard = () => {
           ))
         )}
       </div>
+      {selectedParcel && (
+        <Location
+          isOpen={isModalOpen}
+          onRequestClose={handleCloseModal}
+          parcel={selectedParcel}
+        />
+      )}
     </section>
   );
 };
