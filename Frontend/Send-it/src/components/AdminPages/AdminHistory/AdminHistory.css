@@ -1,0 +1,56 @@
+.content-area-table {
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.data-table-info {
+  margin-bottom: 20px;
+}
+
+.data-table-title {
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.data-table-diagram {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #f4f4f4;
+}
+
+.dt-status {
+  display: flex;
+  align-items: center;
+}
+
+.dt-status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+.dot-picked {
+  background-color: #4caf50;
+}
+
+.dt-cell-action {
+  display: flex;
+  align-items: center;
+}

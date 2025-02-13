@@ -1,0 +1,66 @@
+.status-section {
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.status-container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.status-container h2 {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  color: #333;
+  text-align: center;
+}
+
+.status-container form {
+  display: flex;
+  flex-direction: column;
+}
+
+.status-container label {
+  font-size: 0.9rem;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+.status-container input,
+.status-container select {
+  padding: 10px;
+  width: 100%;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.status-container button {
+  padding: 12px;
+  font-size: 1rem;
+  color: #fff;
+  background-color: #475be8;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.status-container button:hover {
+  background-color: #3748c8;
+}
+
+.status-container .error-message {
+  color: #e74c3c;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+}
+
+.status-container .success-message {
+  color: #27ae60;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+}

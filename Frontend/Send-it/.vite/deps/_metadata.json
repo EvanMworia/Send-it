@@ -1,0 +1,85 @@
+{
+  "hash": "aad2673b",
+  "configHash": "355b5bac",
+  "lockfileHash": "07f54185",
+  "browserHash": "0d7b0a98",
+  "optimized": {
+    "react-dom/client": {
+      "src": "../../node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "ea4ae43c",
+      "needsInterop": true
+    },
+    "react": {
+      "src": "../../node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "e1250cf3",
+      "needsInterop": true
+    },
+    "prop-types": {
+      "src": "../../node_modules/prop-types/index.js",
+      "file": "prop-types.js",
+      "fileHash": "729f570e",
+      "needsInterop": true
+    },
+    "react-router-dom": {
+      "src": "../../../../node_modules/react-router-dom/dist/index.mjs",
+      "file": "react-router-dom.js",
+      "fileHash": "72ffe009",
+      "needsInterop": false
+    },
+    "axios": {
+      "src": "../../node_modules/axios/index.js",
+      "file": "axios.js",
+      "fileHash": "684e397d",
+      "needsInterop": false
+    },
+    "react-vertical-timeline-component": {
+      "src": "../../node_modules/react-vertical-timeline-component/dist-es6/index.js",
+      "file": "react-vertical-timeline-component.js",
+      "fileHash": "5ea9c2d1",
+      "needsInterop": true
+    },
+    "react-icons/md": {
+      "src": "../../../../node_modules/react-icons/md/index.mjs",
+      "file": "react-icons_md.js",
+      "fileHash": "ed456a1d",
+      "needsInterop": false
+    },
+    "react-icons/fa": {
+      "src": "../../../../node_modules/react-icons/fa/index.mjs",
+      "file": "react-icons_fa.js",
+      "fileHash": "23bff0d7",
+      "needsInterop": false
+    },
+    "date-fns": {
+      "src": "../../../../node_modules/date-fns/index.js",
+      "file": "date-fns.js",
+      "fileHash": "b41f598e",
+      "needsInterop": false
+    },
+    "react-date-range": {
+      "src": "../../../../node_modules/react-date-range/dist/index.js",
+      "file": "react-date-range.js",
+      "fileHash": "c29b6a0a",
+      "needsInterop": true
+    }
+  },
+  "chunks": {
+    "chunk-W24JOBID": {
+      "file": "chunk-W24JOBID.js"
+    },
+    "chunk-2X33BNKP": {
+      "file": "chunk-2X33BNKP.js"
+    },
+    "chunk-UU33VJSO": {
+      "file": "chunk-UU33VJSO.js"
+    },
+    "chunk-TAISGUIM": {
+      "file": "chunk-TAISGUIM.js"
+    },
+    "chunk-EWTE5DHJ": {
+      "file": "chunk-EWTE5DHJ.js"
+    }
+  }
+}

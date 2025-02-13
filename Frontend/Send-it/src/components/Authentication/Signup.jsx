@@ -13,11 +13,17 @@ const Signup = () => {
     confirmPassword: "",
     role: "User",
     CreatedAt: new Date(),
-    ProfilePictute: "",
+    ProfilePicture: "",
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
+  const [nameError, setNameError] = useState(null);
+  const [emailError, setEmailError] = useState(null);
+  const [phoneError, setPhoneError] = useState(null);
+  const [passwordError, setPasswordError] = useState(null);
+  const [confirmPasswordError, setConfirmPasswordError] = useState(null);
+
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
@@ -26,6 +32,11 @@ const Signup = () => {
       ...prevState,
       [name]: value,
     }));
+    if (name === "name") setNameError(null);
+    if (name === "email") setEmailError(null);
+    if (name === "phone") setPhoneError(null);
+    if (name === "password") setPasswordError(null);
+    if (name === "confirmPassword") setConfirmPasswordError(null);
   };
 
   const register = async (userData) => {
@@ -39,11 +50,37 @@ const Signup = () => {
     setError(null);
     setSuccessMessage(null);
 
+    let valid = true;
+    if (!formData.name) {
+      setNameError("Please fill in the name field.");
+      valid = false;
+    }
+    if (!formData.email) {
+      setEmailError("Please fill in the email field.");
+      valid = false;
+    }
+    if (!formData.phone) {
+      setPhoneError("Please fill in the phone field.");
+      valid = false;
+    }
+    if (!formData.password) {
+      setPasswordError("Please fill in the password field.");
+      valid = false;
+    }
+    if (!formData.confirmPassword) {
+      setConfirmPasswordError("Please fill in the confirm password field.");
+      valid = false;
+    }
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match.");
       setLoading(false);
       return;
     }
+    if (!valid) {
+      setLoading(false);
+      return;
+    }
+
     try {
       const userData = {
         FullName: formData.name,
@@ -59,12 +96,12 @@ const Signup = () => {
       if (response.status === 201) {
         setSuccessMessage("User registered successfully!");
         setFormData({
-          Fullname: "",
-          Email: "",
-          Phone: "",
-          Password: "",
+          name: "",
+          email: "",
+          phone: "",
+          password: "",
           confirmPassword: "",
-          Role: "User",
+          role: "User",
           CreatedAt: new Date(),
           ProfilePicture: "",
         });
@@ -101,8 +138,8 @@ const Signup = () => {
               name="name"
               value={formData.name}
               onChange={handleInputChange}
-              required
             />
+            {nameError && <div className="error-message">{nameError}</div>}
           </div>
           <div>
             <label>Email: </label>
@@ -111,8 +148,8 @@ const Signup = () => {
               name="email"
               value={formData.email}
               onChange={handleInputChange}
-              required
             />
+            {emailError && <div className="error-message">{emailError}</div>}
           </div>
           <div>
             <label>Phone Number: </label>
@@ -121,8 +158,8 @@ const Signup = () => {
               name="phone"
               value={formData.phone}
               onChange={handleInputChange}
-              required
             />
+            {phoneError && <div className="error-message">{phoneError}</div>}
           </div>
           <div>
             <label>Password: </label>
@@ -131,8 +168,8 @@ const Signup = () => {
               name="password"
               value={formData.password}
               onChange={handleInputChange}
-              required
             />
+            {passwordError && <div className="error-message">{passwordError}</div>}
           </div>
           <div>
             <label>Confirm Password: </label>
@@ -141,8 +178,8 @@ const Signup = () => {
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleInputChange}
-              required
             />
+            {confirmPasswordError && <div className="error-message">{confirmPasswordError}</div>}
           </div>
 
           <button type="submit" disabled={loading}>
