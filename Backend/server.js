@@ -5,12 +5,13 @@ import userRouter from './routes/userRoutes.js';
 import parcelRouter from './routes/parcelRoutes.js';
 
 const app = express();
-app.use(json()); // P
+// app.use(express.json);
+app.use(json()); // Parse JSON requests
 // Middleware
-app.use(cors({ origin: 'http://localhost:3001', credentials: true }));
-//arse JSON requests
+// app.use(cors({ origin: 'http://localhost:3001', credentials: true }));
+app.use(cors());
 
-app.use(express.urlencoded({ extended: true })); // Middleware to parse form data
+// app.use(express.urlencoded({ extended: true })); // Middleware to parse form data
 
 // Routes
 app.use('/users', userRouter);
