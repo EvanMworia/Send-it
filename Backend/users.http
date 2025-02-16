@@ -2,8 +2,8 @@ POST http://localhost:5000/users/registerUser
 Content-Type: application/json
 
 {
-    "FullName":"Evan",
-    "Email":"evannji99@gmail.com",
+    "FullName":"Sam",
+    "Email":"samwels036@gmail.com",
     "Password":"Test@2024",
     "ProfilePicture": "sbcbjs",
     "Phone": "sncis",
@@ -22,7 +22,7 @@ Content-Type: application/json
 }
 ####
 GET http://localhost:5000/users/getAllUsers
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJkYTJjMDk5Mi1jYTJhLTRlNmItODA0ZS05YTAyMDg3ZWVhNDUiLCJyb2xlIjoiQWRtaW4iLCJpYXQiOjE3Mzk0NDA1NDYsImV4cCI6MTczOTQ0NDE0Nn0.qLA9X3yua8_NjKD8ufQGyHduPZoBaJ2_JwQOZnIVSnI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJkYTJjMDk5Mi1jYTJhLTRlNmItODA0ZS05YTAyMDg3ZWVhNDUiLCJyb2xlIjoiQWRtaW4iLCJpYXQiOjE3Mzk1Mzg1MjAsImV4cCI6MTczOTU0MjEyMH0.qoSD90VuN5jZRtAzLA3WC9WSG0MIj_M00PJewTl78pY
 #-----GETS ALL THE users FROM THE DATABASE THAT EXIST
 
 ######

@@ -1,5 +1,25 @@
 
-GET http://localhost:3000/parcels
+GET http://localhost:5000/parcels
 #-----GETS ALL THE parcels FROM THE DATABASE THAT EXIST
 
 ######
+GET http://localhost:5000/parcels/sending/ivonnenabangala@gmail.com
+#GETS OUTGOING PARCELS FOR A USER 
+#---PARCELS SENT BY A USER
+
+#######
+
+GET http://localhost:5000/parcels/receiving/ivonnenabangala@gmail.com
+# GETS INCOMING PARCELS FOR A USER 
+
+######
+POST http://localhost:5000/parcels
+Content-Type: application/json
+
+{ 
+    "senderEmail": "jennifer.o.akinyi@gmail.com",
+    "receiverEmail": "ivonnenabangala@gmail.com",
+    "sendingLocation": "Nairobi",
+    "pickupLocation": "Nairobi"
+    
+}
