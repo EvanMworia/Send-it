@@ -1,0 +1,48 @@
+body {
+	/* font-family: Arial, sans-serif; */
+	font-family: 'Kumbh Sans', serif;
+	margin: 20px;
+	background-color: #121212;
+	color: white;
+}
+
+.nav {
+	display: flex;
+	justify-content: center;
+	font-size: larger;
+	font-weight: 900;
+	gap: 15px;
+	margin-bottom: 20px;
+}
+
+.nav a {
+	text-decoration: none;
+	padding: 10px 15px;
+	color: #d100d1;
+	cursor: pointer;
+	position: relative;
+	transition: color 0.3s;
+}
+
+.nav a.active::after {
+	content: '';
+	position: absolute;
+	left: 0;
+	bottom: -5px; /* Adjust spacing */
+	width: 100%;
+	height: 3px;
+	background-color: #f5a623; /* Underline color */
+	border-radius: 2px;
+}
+
+.content {
+	border: 1px solid #ddd;
+	padding: 15px;
+	border-radius: 5px;
+	min-height: 150px;
+}
+
+#receiving {
+	display: none; /* Initially hide receiving section */
+}
+/* =================================================================== */

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Home</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Kumbh+Sans:wght,YOPQ@100,140&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playwrite+IN:wght@100..400&family=Quicksand:wght@300..700&display=swap"
+			rel="stylesheet"
+		/>
+		<script defer src="app.js"></script>
+		<script defer src="home.js"></script>
+		<link rel="stylesheet" href="home.css" />
+	</head>
+	<body>
+		<div class="nav">
+			<a id="sendLink" class="active">Sending</a>
+			<a id="receiveLink">Receiving</a>
+		</div>
+
+		<div id="sending" class="content">
+			<h2>Parcels You Are Sending</h2>
+			<!-- <ul id="sendingList">
+				Sending parcels will be loaded here
+			</ul> -->
+			<div id="sendingList"></div>
+		</div>
+
+		<div id="receiving" class="content">
+			<h2>Parcels You Are Receiving</h2>
+			<!-- <ul id="receivingList">
+				Receiving parcels will be loaded here
+			</ul> -->
+			<div id="receivingList"></div>
+		</div>
+	</body>
+</html>
