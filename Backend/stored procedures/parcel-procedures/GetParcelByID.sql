@@ -1,5 +1,7 @@
-CREATE PROCEDURE sp_GetParcelByID
-    @ParcelID UNIQUEIDENTIFIER
+USE SENDITDB
+GO
+CREATE OR ALTER PROCEDURE sp_GetParcelByID
+    @ParcelID VARCHAR(255)
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -8,7 +10,7 @@ BEGIN
     IF EXISTS (SELECT 1 FROM Parcels WHERE ParcelID = @ParcelID AND IsDeleted = 0)
     BEGIN
         SELECT 
-            ParcelID, SenderID, ReceiverID, SendingLocation, PickupLocation, 
+            ParcelID, SenderEmail, ReceiverEmail, SendingLocation, PickupLocation, 
             Status, CreatedAt, UpdatedAt
         FROM Parcels
         WHERE ParcelID = @ParcelID AND IsDeleted = 0;
