@@ -2,23 +2,28 @@
 
 // const { getAllParcels, getParcelById, createParcel, updateParcel, deleteParcel,getUserParcels, getUsersReceivingParcels, getUsersSendingParcels } = require('../controllers/parcelController');
 import express from 'express';
-import { getAllParcels, getParcelById, createParcel, updateParcel, deleteParcel,getUserParcels, getUsersReceivingParcels, getUsersSendingParcels } from '../controllers/parcelController.js';
+import {
+	getAllParcels,
+	getParcelById,
+	createParcel,
+	updateParcel,
+	deleteParcel,
+	getUsersReceivingParcels,
+	getUsersSendingParcels,
+} from '../controllers/parcelController.js';
 
- const parcelRouter= express.Router();
+const parcelRouter = express.Router();
 
 // Controller functions (you need to create these functions in your controllers)
 
 // Routes
-parcelRouter.get('/parcels', getAllParcels);
-parcelRouter.get('/parcels/:id', getParcelById);
-parcelRouter.post('/parcels', createParcel);
-parcelRouter.put('/parcels/update', updateParcel);
+parcelRouter.get('/parcels', getAllParcels); //updated to get by Email
+parcelRouter.get('/parcels/:id', getParcelById); //looks okay not touched
+parcelRouter.post('/parcels', createParcel); //updated to create parcel by using Emails
+parcelRouter.put('/parcels/update', updateParcel); //----RECHECK THIS ROUTE
 parcelRouter.put('/parcels/:parcelId', deleteParcel);
 
+parcelRouter.get('/parcels/sending/:senderEmail', getUsersSendingParcels); //updated to use email instead
+parcelRouter.get('/parcels/receiving/:receiverEmail', getUsersReceivingParcels); //updated to use email instead
 
-parcelRouter.get('/parcels/user/:userId',getUserParcels);
-
-parcelRouter.get('/parcels/sending/:senderID', getUsersSendingParcels);
-parcelRouter.get('/parcels/receiving/:receiverID', getUsersReceivingParcels);
-
- export default parcelRouter;
+export default parcelRouter;
