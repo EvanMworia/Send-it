@@ -40,6 +40,54 @@ export async function sendWelcomeEmail(recipient, appUserName) {
 		console.error('Error while sending email', error);
 	}
 }
+
+//New Parcel Notification
+export async function notifyParcelRecepient(parcelSender, parcelReceipient, parcelId, pickupLocation) {
+	try {
+		await transporter.sendMail({
+			from: `SendIt Team <${process.env.EMAIL_USER}>`,
+			to: `<${parcelReceipient}>`,
+			subject: `NEW PARCEL ALERT`,
+			html: `
+                <h1>Parcel Comming your way.</h1>
+                <p>${parcelSender} has sent you a parcel <b> ${parcelId} </b>, the destination/pickup point is ${pickupLocation}</p>
+				<p>We will notify you once your parcel arrives</p>
+				<br/>
+				<p><b>NOTE: </b>Keep the tracking number <b> ${parcelId} </b> PRIVATE since we will need you to provide it when you collect your parcel.</p>
+				<p>Thankyou for choosing SendIt</p>
+				<br/>
+				<br/>
+                
+                <p>Best regards, <br/>SendIt Team</p>
+            `,
+		});
+	} catch (error) {
+		console.error('Error while sending email', error);
+	}
+}
+
+export async function notifyParcelSender(parcelSender, parcelReceipient, parcelId, pickupLocation) {
+	try {
+		await transporter.sendMail({
+			from: `SendIt Team <${process.env.EMAIL_USER}>`,
+			to: `<${parcelSender}>`,
+			subject: `PARCEL ALERT`,
+			html: `
+                <h1>Outgoing Parcel Confirmed</h1>
+                <p><b> ${parcelId} </b> has been sent to ${parcelReceipient}, the destination/pickup point is ${pickupLocation}</p>
+				<p>We will notify you once your parcel arrives</p>
+				<br/>
+				
+				<p>Thankyou for choosing SendIt</p>
+				<br/>
+				<br/>
+                <p>Best regards, <br/>SendIt Team</p>
+            `,
+		});
+	} catch (error) {
+		console.error('Error while sending email', error);
+	}
+}
 export async function sendUpdateEmail(parcelSender, parcelReceipient, parcelId, status) {
 	try {
 		await transporter.sendMail({
@@ -49,6 +97,7 @@ export async function sendUpdateEmail(parcelSender, parcelReceipient, parcelId, 
 			html: `
                 <h1>News on your parcel!</h1>
                 <p>Thankyou for choosing SendIt </p>
+				
                 <p>Your parcel ${parcelId}, is now ${status}</p>
                 <p>Best regards, <br/>SendIt Team</p>
             `,
