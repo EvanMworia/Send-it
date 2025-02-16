@@ -1,16 +1,17 @@
 import { validateParcel, validateDelete, validateStatus } from '../models/parcelModel.js';
 import { DbHelper } from '../Database/DbHelper.js';
-import { sendUpdateEmail } from '../services/emailService.js';
+import { notifyParcelRecepient, notifyParcelSender, sendUpdateEmail } from '../services/emailService.js';
+import { v4 as uid } from 'uuid';
 
 const db = new DbHelper();
 
 const getAllParcels = async (req, res) => {
 	try {
-		const { senderID, receiverID, status } = req.query;
+		const { senderEmail, receiverEmail, status } = req.query;
 
 		const result = await db.executeProcedure('GetAllParcels', {
-			SenderID: senderID || null,
-			ReceiverID: receiverID || null,
+			SenderEmail: senderEmail || null,
+			ReceiverEmail: receiverEmail || null,
 			Status: status || null,
 		});
 		if (!result.recordset.length) {
@@ -84,14 +85,15 @@ async function createParcel(req, res) {
 			});
 		}
 
+		let parcelId = uid();
 		// Destructure the validated data
-		const { senderId, receiverId, sendingLocation, pickupLocation } = value;
+		const { senderEmail, receiverEmail, sendingLocation, pickupLocation } = value;
 
 		// Execute the stored procedure to create a new parcel
-		let results = await db.executeProcedure('UpsertParcel', {
-			ParcelID: null, // NULL for new parcels
-			SenderID: senderId,
-			ReceiverID: receiverId,
+		let results = await db.executeProcedure('UpdinsParcel', {
+			ParcelID: parcelId,
+			SenderEmail: senderEmail,
+			ReceiverEmail: receiverEmail,
 			SendingLocation: sendingLocation,
 			PickupLocation: pickupLocation,
 			Status: 'Pending',
@@ -103,6 +105,9 @@ async function createParcel(req, res) {
 			success: true,
 			message: 'Parcel created successfully',
 		});
+		//SHOULD SEND A NOTIFICATION EMAIL HERE
+		await notifyParcelRecepient(senderEmail, receiverEmail, parcelId, pickupLocation);
+		await notifyParcelSender(senderEmail, receiverEmail, parcelId, pickupLocation);
 	} catch (error) {
 		console.error('Error creating parcel:', error);
 		res.status(500).json({
@@ -131,8 +136,8 @@ async function updateParcel(req, res) {
 		// Execute the stored procedure to update status
 		let results = await db.executeProcedure('UpsertParcel', {
 			ParcelID: parcelId,
-			SenderID: null, // Not needed for update
-			ReceiverID: null, // Not needed for update
+			SenderEmail: null, // Not needed for update
+			ReceiverEmail: null, // Not needed for update
 			SendingLocation: null, // Not needed for update
 			PickupLocation: null, // Not needed for update
 			Status: status,
@@ -146,7 +151,7 @@ async function updateParcel(req, res) {
 				success: true,
 				message: `Parcel status updated to ${status}.`,
 			});
-			sendUpdateEmail(parcelId, status);
+			// sendUpdateEmail(parcelId, status);
 		} else {
 			res.status(404).json({
 				success: false,
@@ -205,23 +210,22 @@ async function deleteParcel(req, res) {
 	}
 }
 
-async function getUserParcels(req, res) {}
-
+//=============SHOULD BE GET PARCELS ASSOCIATED BY SENDER EMAIL=========================
 async function getUsersSendingParcels(req, res) {
 	try {
-		const { senderID } = req.params; // Extract sender ID from route parameters
+		const { senderEmail } = req.params; // Extract senderEmail from route parameters
 
-		if (!senderID) {
+		if (!senderEmail) {
 			return res.status(400).json({
 				success: false,
-				message: 'Sender ID is required',
+				message: 'Sender Email is required',
 			});
 		}
 
 		// Execute the stored procedure, filtering only by SenderID
 		const result = await db.executeProcedure('GetAllParcels', {
-			SenderID: senderID,
-			ReceiverID: null,
+			SenderEmail: senderEmail,
+			ReceiverEmail: null,
 			Status: null,
 		});
 
@@ -248,19 +252,19 @@ async function getUsersSendingParcels(req, res) {
 
 async function getUsersReceivingParcels(req, res) {
 	try {
-		const { receiverID } = req.params; // Extract sender ID from route parameters
+		const { receiverEmail } = req.params; // Extract receiverEmail from route parameters
 
-		if (!receiverID) {
+		if (!receiverEmail) {
 			return res.status(400).json({
 				success: false,
-				message: 'Receiver ID is required',
+				message: 'receiverEmail is required',
 			});
 		}
 
-		// Execute the stored procedure, filtering only by ReceiverID
+		// Execute the stored procedure, filtering only by receiverEmail
 		const result = await db.executeProcedure('GetAllParcels', {
-			SenderID: null,
-			ReceiverID: receiverID,
+			SenderEmail: null,
+			ReceiverEmail: receiverEmail,
 			Status: null,
 		});
 
@@ -291,7 +295,6 @@ export {
 	createParcel,
 	updateParcel,
 	deleteParcel,
-	getUserParcels,
 	getUsersSendingParcels,
 	getUsersReceivingParcels,
 };
