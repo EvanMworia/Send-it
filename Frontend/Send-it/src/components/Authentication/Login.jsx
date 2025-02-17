@@ -40,7 +40,7 @@ const Login = () => {
     if (!valid) return;
 
     try {
-      const response = await axios.get(`http://localhost:3000/users?Email=${email}`);
+      const response = await axios.get(`http://localhost:4000/users?Email=${email}`);
       const users = response.data;
       if (users.length === 0) {
         setErrorMessage("User not found.");

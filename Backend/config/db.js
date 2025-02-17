@@ -17,7 +17,7 @@ export const sqlConfig = {
 	password: process.env.DB_PWD,
 	database: process.env.DB_NAME,
 	server: process.env.DB_SERVER,
-	server: process.env.SERVER_NAME,
+	// server: process.env.SERVER_NAME,
 	pool: {
 		max: 10,
 		min: 0,
@@ -38,5 +38,5 @@ async function test() {
 		console.error(error);
 	}
 }
-// test();
+test();
 //export { sqlConfig };
