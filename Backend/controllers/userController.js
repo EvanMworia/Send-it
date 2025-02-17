@@ -43,7 +43,7 @@ export async function registerNewUser(req, res) {
 			UserID,
 			FullName,
 			Email,
-			Password: hashedPassword,
+			PasswordHash: hashedPassword,
 			ProfilePicture,
 			Phone,
 			Role,

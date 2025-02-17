@@ -12,8 +12,6 @@ const Signup = () => {
     password: "",
     confirmPassword: "",
     role: "User",
-    CreatedAt: new Date(),
-    ProfilePicture: "",
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -40,7 +38,7 @@ const Signup = () => {
   };
 
   const register = async (userData) => {
-    const response = await axios.post("http://localhost:3000/users", userData);
+    const response = await axios.post("http://localhost:4000/users/registerUser", userData);
     return response;
   };
 
@@ -81,6 +79,7 @@ const Signup = () => {
       return;
     }
 
+    const defaultProfilePicture = "https://plus.unsplash.com/premium_photo-1689977968861-9c91dbb16049?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZSUyMHBpY3R1cmV8ZW58MHx8MHx8fDA%3D";
     try {
       const userData = {
         FullName: formData.name,
@@ -88,9 +87,7 @@ const Signup = () => {
         Phone: formData.phone,
         Password: formData.password,
         Role: "User",
-        CreatedAt: new Date(),
-        IsDeleted: false,
-        ProfilePicture: ""
+        ProfilePicture: defaultProfilePicture,
       };
       const response = await register(userData);
       if (response.status === 201) {
@@ -102,8 +99,6 @@ const Signup = () => {
           password: "",
           confirmPassword: "",
           role: "User",
-          CreatedAt: new Date(),
-          ProfilePicture: "",
         });
 
         setTimeout(() => {
@@ -113,7 +108,7 @@ const Signup = () => {
         throw new Error("Failed to register user");
       }
     } catch (err) {
-      setError(err.message || "An error occurred while registering the user.");
+      setError(err.response?.data?.message || err.message || "An error occurred while registering the user.");
     } finally {
       setLoading(false);
     }
