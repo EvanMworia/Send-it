@@ -4,6 +4,7 @@ GET http://localhost:5000/parcels
 
 ######
 GET http://localhost:5000/parcels/sending/ivonnenabangala@gmail.com
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI5NjQyNGVhOC1mODRlLTRlMDktOTFiZi01Mjc4ZTEyNDdhMDYiLCJyb2xlIjoiQWRtaW4iLCJpYXQiOjE3Mzk3NDc5MzMsImV4cCI6MTczOTc1MTUzM30.Tt7U0wPNrLpwMjcxoBdaZchKabF7jVDgq6hkDhTTyEo
 #GETS OUTGOING PARCELS FOR A USER 
 #---PARCELS SENT BY A USER
 
@@ -17,9 +18,14 @@ POST http://localhost:5000/parcels
 Content-Type: application/json
 
 { 
-    "senderEmail": "jennifer.o.akinyi@gmail.com",
-    "receiverEmail": "ivonnenabangala@gmail.com",
-    "sendingLocation": "Nairobi",
+    "senderEmail": "evansgith@gmail.com",
+    "receiverEmail": "kxngpanther@gmail.com",
+    "sendingLocation": "Nakuru",
     "pickupLocation": "Nairobi"
     
 }
+
+#####
+GET http://localhost:5000/parcels/sending
+
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI5NjQyNGVhOC1mODRlLTRlMDktOTFiZi01Mjc4ZTEyNDdhMDYiLCJlbWFpbCI6Iml2b25uZW5hYmFuZ2FsYUBnbWFpbC5jb20iLCJyb2xlIjoiQWRtaW4iLCJpYXQiOjE3Mzk3NDkzMTEsImV4cCI6MTczOTc1MjkxMX0.GT-jS2LRcbhY3bSH_DoZtIsp9pJT_FHjOdzmzUyVWr8
