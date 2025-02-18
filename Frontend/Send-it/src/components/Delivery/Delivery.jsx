@@ -1,30 +1,45 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import Select from 'react-select';
-import { useNavigate } from 'react-router-dom';
-import './Delivery.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Select from "react-select";
+import { useNavigate } from "react-router-dom";
+import "./Delivery.css";
 
 const Delivery = () => {
   const [formData, setFormData] = useState({
-    SenderID: '',
-    ReceiverID: '',
-    SendingLocation: '',
-    PickupLocation: '',
-    Status: 'Pending',
+    senderId: "",
+    receiverId: "",
+    sendingLocation: "",
+    pickupLocation: "",
+    status: "Pending",
   });
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
   const navigate = useNavigate();
+  const majorTowns = [
+    'Nairobi', 'Mombasa', 'Kisumu', 'Nakuru', 'Eldoret',
+    'Thika', 'Malindi', 'Kitale', 'Garissa', 'Nyeri'
+  ];
+  
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/users');
-        setUsers(response.data.filter(user => user.Role === 'User'));
+        const loggedInUser = JSON.parse(localStorage.getItem("user"));
+        const token = loggedInUser.token;
+
+        const response = await axios.get(
+          "http://localhost:4000/users/getAllUsers",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setUsers(response.data.filter((user) => user.Role === "User"));
       } catch (error) {
-        setError('Error fetching users');
+        setError("Error fetching users");
       }
     };
 
@@ -43,7 +58,7 @@ const Delivery = () => {
     const { name } = actionMeta;
     setFormData((prevState) => ({
       ...prevState,
-      [name]: selectedOption ? selectedOption.value : '',
+      [name]: selectedOption ? selectedOption.value : "",
     }));
   };
 
@@ -54,34 +69,42 @@ const Delivery = () => {
     setSuccessMessage(null);
 
     try {
-      const response = await axios.post('http://localhost:3000/parcels', {
-        ...formData,
-        CreatedAt: new Date(),
-        UpdatedAt: new Date(),
-        IsDeleted: false,
-      });
+      const loggedInUser = JSON.parse(localStorage.getItem("user"));
+      const token = loggedInUser.token;
+
+      const response = await axios.post(
+        "http://localhost:4000/parcel/parcels",
+        {
+          ...formData,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       if (response.status === 201) {
-        setSuccessMessage('Parcel created successfully!');
+        setSuccessMessage("Parcel created successfully!");
         setFormData({
-          SenderID: '',
-          ReceiverID: '',
-          SendingLocation: '',
-          PickupLocation: '',
-          Status: 'Pending',
+          senderId: "",
+          receiverId: "",
+          sendingLocation: "",
+          pickupLocation: "",
+          status: "Pending",
         });
         setTimeout(() => {
-          navigate('/dashboard');
+          navigate("/dashboard");
         }, 500);
       }
     } catch (error) {
-      setError('Error creating parcel');
+      setError(error.message);
     } finally {
       setLoading(false);
     }
   };
 
-  const userOptions = users.map(user => ({
-    value: user.id,
+  const userOptions = users.map((user) => ({
+    value: user.UserID,
     label: user.FullName,
   }));
 
@@ -95,8 +118,10 @@ const Delivery = () => {
           <div>
             <label>Sender:</label>
             <Select
-              name="SenderID"
-              value={userOptions.find(option => option.value === formData.SenderID)}
+              name="senderId"
+              value={userOptions.find(
+                (option) => option.value === formData.senderId
+              )}
               onChange={handleSelectChange}
               options={userOptions}
               isClearable
@@ -107,8 +132,10 @@ const Delivery = () => {
           <div>
             <label>Receiver:</label>
             <Select
-              name="ReceiverID"
-              value={userOptions.find(option => option.value === formData.ReceiverID)}
+              name="receiverId"
+              value={userOptions.find(
+                (option) => option.value === formData.receiverId
+              )}
               onChange={handleSelectChange}
               options={userOptions}
               isClearable
@@ -118,29 +145,41 @@ const Delivery = () => {
           </div>
           <div>
             <label>Sending Location:</label>
-            <input
-              type="text"
-              name="SendingLocation"
-              value={formData.SendingLocation}
+            <select
+              name="sendingLocation"
+              value={formData.sendingLocation}
               onChange={handleInputChange}
               required
-            />
+            >
+              <option value="">Select Location</option>
+              {majorTowns.map((town) => (
+                <option key={town} value={town}>
+                  {town}
+                </option>
+              ))}
+            </select>
           </div>
           <div>
             <label>Pickup Location:</label>
-            <input
-              type="text"
-              name="PickupLocation"
-              value={formData.PickupLocation}
+            <select
+              name="pickupLocation"
+              value={formData.pickupLocation}
               onChange={handleInputChange}
               required
-            />
+            >
+              <option value="">Select Location</option>
+              {majorTowns.map((town) => (
+                <option key={town} value={town}>
+                  {town}
+                </option>
+              ))}
+            </select>
           </div>
           <div>
             <label>Status:</label>
             <select
-              name="Status"
-              value={formData.Status}
+              name="status"
+              value={formData.status}
               onChange={handleInputChange}
               required
             >
@@ -150,7 +189,7 @@ const Delivery = () => {
             </select>
           </div>
           <button type="submit" disabled={loading}>
-            {loading ? 'Creating...' : 'Create Parcel'}
+            {loading ? "Creating..." : "Create Parcel"}
           </button>
         </form>
       </div>

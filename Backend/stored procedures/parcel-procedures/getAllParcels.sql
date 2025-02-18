@@ -4,6 +4,7 @@ CREATE or ALTER PROCEDURE GetAllParcels
     @Status NVARCHAR(50) = NULL  -- Optional filter
 AS
 BEGIN
+    SET NOCOUNT ON;
     
 
     SELECT 

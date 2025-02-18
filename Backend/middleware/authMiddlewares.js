@@ -11,20 +11,20 @@ const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 export function authenticateJWT(req, res, next) {
-	const token = req.header('Authorization');
+  const authHeader = req.headers.authorization;
 
-	if (!token) {
-		return res.status(401).json({ message: 'Access Denied. No token provided.' });
-	}
+  if (authHeader) {
+    const token = authHeader.split(' ')[1];
 
-	try {
-		const decoded = jwt.verify(token.replace('Bearer ', ''), process.env.JWT_SECRET);
+    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+      if (err) {
+        return res.sendStatus(403);
+      }
 
-		req.user = decoded; // Attach user data to the request
-		next();
-	} catch (error) {
-		res.status(401).json({ message: 'Invalid Token' });
-	}
+      req.user = user;
+      next();
+    });
+  } else {
+    res.sendStatus(401);
+  }
 }
-
-console.log('shdddd', process.env.JWT_SECRET);

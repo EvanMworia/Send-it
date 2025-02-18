@@ -3,7 +3,7 @@ import axios from 'axios';
 import './AdminHistory.css';
 
 const TABLE_HEADS = [
-  "id",
+  "ParcelID",
   "Sender Name",
   "Receiver Name",
   "Sending Location",
@@ -20,9 +20,15 @@ const AdminHistory = () => {
   useEffect(() => {
     const fetchParcelAndUserData = async () => {
       try {
+        const loggedInUser = JSON.parse(localStorage.getItem("user"));
+        const token = loggedInUser.token;
         const [parcelsResponse, usersResponse] = await Promise.all([
-          axios.get("http://localhost:3000/parcels"),
-          axios.get("http://localhost:3000/users"),
+          axios.get("http://localhost:4000/parcel/parcels"),
+          axios.get("http://localhost:4000/users/getAllUsers", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }),
         ]);
         setParcelData(parcelsResponse.data);
         setUserData(usersResponse.data);
@@ -36,12 +42,12 @@ const AdminHistory = () => {
     fetchParcelAndUserData();
   }, []);
 
-  const getUserNameById = (id) => {
-    const user = userData.find((user) => user.id === id);
+  const getUserNameById = (UserID) => {
+    const user = userData.find((user) => user.UserID === UserID);
     return user ? user.FullName : "Unknown";
   };
 
-  const filteredParcels = parcelData.filter(parcel => parcel.Status === "Picked");
+  const filteredParcels = Object.values(parcelData).filter(parcel => parcel.Status === "Picked");
 
   if (loading) {
     return <p>Loading...</p>;
@@ -68,8 +74,8 @@ const AdminHistory = () => {
           <tbody>
             {filteredParcels?.map((dataItem) => {
               return (
-                <tr key={dataItem.id}>
-                  <td>{dataItem.id}</td>
+                <tr key={dataItem.ParcelID}>
+                  <td>{dataItem.ParcelID}</td>
                   <td>{getUserNameById(dataItem.SenderID)}</td>
                   <td>{getUserNameById(dataItem.ReceiverID)}</td>
                   <td>{dataItem.SendingLocation}</td>

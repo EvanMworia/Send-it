@@ -13,17 +13,13 @@ const getAllParcels = async (req, res) => {
 			ReceiverID: receiverID || null,
 			Status: status || null,
 		});
-		if (!result.recordset.length) {
-			return res.status(404).json({
-				success: false,
-				message: 'No parcels found',
-			});
-		} else {
+		
+		
 			res.status(200).json({
 				success: true,
 				data: result.recordset, // Return fetched parcels
 			});
-		}
+		
 	} catch (error) {
 		console.error('Error fetching parcels:', error);
 		res.status(500).json({

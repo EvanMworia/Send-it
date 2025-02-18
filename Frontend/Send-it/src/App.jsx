@@ -13,7 +13,7 @@ import History from "./components/History/History";
 import Notification from "./components/Notification/Notification";
 import Profile from "./components/Profile/Profile";
 import Location from "./components/Location/Location";
-import Delivery from "./components/AdminPages/Delivery/Delivery";
+import Delivery from "./components/Delivery/Delivery";
 import Process from "./components/AdminPages/Process/Process";
 import AdminHistory from "./components/AdminPages/AdminHistory/AdminHistory";
 import Status from "./components/AdminPages/StatusUpdate/Status";
@@ -42,6 +42,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/history" element={<History />} />
             <Route path="/notification" element={<Notification />} />
+            <Route path="/delivery" element={<Delivery />} />
             <Route path="/location" element={<Location />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/status/:id" element={<Status />} />
@@ -54,14 +55,14 @@ function App() {
                 </AdminRoute>
               }
             />
-            <Route
+            {/* <Route
               path="/delivery"
               element={
                 <AdminRoute>
                   <Delivery />
                 </AdminRoute>
               }
-            />
+            /> */}
             <Route
                 path="/processing"
                 element={

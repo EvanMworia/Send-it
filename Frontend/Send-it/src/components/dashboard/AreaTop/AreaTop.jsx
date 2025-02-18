@@ -47,10 +47,12 @@ const AreaTop = () => {
     const fetchUserProfile = async () => {
       try {
         const loggedInUser = JSON.parse(localStorage.getItem('user'));
-        if (loggedInUser) {
-          const response = await axios.get(`http://localhost:3000/users/${loggedInUser.id}`);
+        if (loggedInUser && loggedInUser.User && loggedInUser.User.UserID) {
+          const response = await axios.get(`http://localhost:4000/users/getUserById/${loggedInUser.User.UserID}`);
           const user = response.data;
           setProfilePicture(user.ProfilePicture);
+        } else {
+          console.error("User ID is not available in localStorage");
         }
       } catch (error) {
         console.error("Error fetching user profile:", error);

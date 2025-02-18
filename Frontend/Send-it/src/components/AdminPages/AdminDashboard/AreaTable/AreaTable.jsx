@@ -4,7 +4,7 @@ import AreaTableAction from "./AreaTableAction";
 import "./AreaTable.scss";
 
 const TABLE_HEADS = [
-  "id",
+  "ParcelID",
   "Sender Name",
   "Receiver Name",
   "Sending Location",
@@ -24,14 +24,21 @@ const AreaTable = () => {
   useEffect(() => {
     const fetchParcelAndUserData = async () => {
       try {
+        const loggedInUser = JSON.parse(localStorage.getItem("user"));
+        const token = loggedInUser.token;
         const [parcelsResponse, usersResponse] = await Promise.all([
-          axios.get("http://localhost:3000/parcels"),
-          axios.get("http://localhost:3000/users"),
+          axios.get("http://localhost:4000/parcel/parcels"),
+          axios.get("http://localhost:4000/users/getAllUsers", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }),
         ]);
-        setParcelData(parcelsResponse.data);
-        setUserData(usersResponse.data);
+        console.log(parcelsResponse.data); 
+        setParcelData(Array.isArray(parcelsResponse.data) ? parcelsResponse.data : []);
+        setUserData(Array.isArray(usersResponse.data) ? usersResponse.data : []);
       } catch (error) {
-        setError("Error fetching data");
+        setError(error.message);
       } finally {
         setLoading(false);
       }
@@ -40,8 +47,8 @@ const AreaTable = () => {
     fetchParcelAndUserData();
   }, []);
 
-  const getUserNameById = (id) => {
-    const user = userData.find((user) => user.id === id);
+  const getUserNameById = (UserID) => {
+    const user = userData.find((user) => user.UserID === UserID);
     return user ? user.FullName : "Unknown";
   };
 
@@ -78,8 +85,8 @@ const AreaTable = () => {
           </thead>
           <tbody>
             {currentItems?.map((dataItem) => (
-              <tr key={dataItem.id}>
-                <td>{dataItem.id}</td>
+              <tr key={dataItem.ParcelID}>
+                <td>{dataItem.ParcelID}</td>
                 <td>{getUserNameById(dataItem.SenderID)}</td>
                 <td>{getUserNameById(dataItem.ReceiverID)}</td>
                 <td>{dataItem.SendingLocation}</td>
@@ -87,13 +94,13 @@ const AreaTable = () => {
                 <td>
                   <div className="dt-status">
                     <span
-                      className={`dt-status-dot dot-${dataItem.Status.toLowerCase()}`}
+                      className={`dt-status-dot dot-${dataItem.Status?.toLowerCase() || 'unknown'}`}
                     ></span>
-                    <span className="dt-status-text">{dataItem.Status}</span>
+                    <span className="dt-status-text">{dataItem.Status || 'Unknown'}</span>
                   </div>
                 </td>
                 <td className="dt-cell-action">
-                  <AreaTableAction id={dataItem.id} />
+                  <AreaTableAction ParcelID={dataItem.ParcelID} />
                 </td>
               </tr>
             ))}

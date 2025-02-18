@@ -27,11 +27,12 @@ const Taskboard = () => {
   useEffect(() => {
     const fetchPackagesAndUsers = async () => {
       try {
+        const loggedInUser = JSON.parse(localStorage.getItem('user'));
         const [packagesResponse, usersResponse] = await Promise.all([
-          axios.get('http://localhost:3000/parcels'),
-          axios.get('http://localhost:3000/users')
+          axios.get('http://localhost:4000/parcel/parcels'),
+          axios.get(`http://localhost:4000/users/getUserById/${loggedInUser.User.UserID}`)
         ]);
-        setPackages(packagesResponse.data);
+        setPackages(packagesResponse.data.data);
         setUsers(usersResponse.data);
       } catch (err) {
         setError(err.message || 'An error occurred while fetching data.');
@@ -43,10 +44,10 @@ const Taskboard = () => {
     fetchPackagesAndUsers();
   }, []);
 
-  const getUserNameById = (id) => {
-    const user = users.find((user) => user.id === id);
+  const getUserNameById = (UserID) => {
+    const user = users.find((user) => user.UserID === UserID);
     return user ? user.FullName : 'Unknown';
-  };
+  }
 
   const handleParcelClick = (parcel) => {
     setSelectedParcel(parcel);
@@ -61,10 +62,10 @@ const Taskboard = () => {
   const filteredPackages = packages.filter((pkg) => {
     const loggedInUser = JSON.parse(localStorage.getItem('user'));
     if (!loggedInUser) return false;
-    const isSenderOrReceiver = pkg.SenderID === loggedInUser.id || pkg.ReceiverID === loggedInUser.id;
+    const isSenderOrReceiver = pkg.SenderID === loggedInUser.User.UserID || pkg.ReceiverID === loggedInUser.User.UserID;
     if (!isSenderOrReceiver) return false;
-    if (selectedRole === 'Sender' && pkg.SenderID !== loggedInUser.id) return false;
-    if (selectedRole === 'Receiver' && pkg.ReceiverID !== loggedInUser.id) return false;
+    if (selectedRole === 'Sender' && pkg.SenderID !== loggedInUser.User.UserID) return false;
+    if (selectedRole === 'Receiver' && pkg.ReceiverID !== loggedInUser.User.UserID) return false;
     if (selectedFilter === 'All') return true;
     return pkg.Status === selectedFilter;
   });

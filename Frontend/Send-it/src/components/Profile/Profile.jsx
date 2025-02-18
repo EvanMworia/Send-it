@@ -19,15 +19,17 @@ const Profile = () => {
     const fetchUserProfile = async () => {
       try {
         const loggedInUser = JSON.parse(localStorage.getItem('user'));
-        if (loggedInUser) {
-          const response = await axios.get(`http://localhost:3000/users/${loggedInUser.id}`);
-          const user = response.data;
+        if (loggedInUser && loggedInUser.User && loggedInUser.User.UserID) {
+          const response = await axios.get(`http://localhost:4000/users/getUserById/${loggedInUser.User.UserID}`);
+          const user = response.data[0]; 
           setUserData({
             FullName: user.FullName,
             Email: user.Email,
             Phone: user.Phone,
             ProfilePicture: user.ProfilePicture,
           });
+        } else {
+          setError('User is not logged in or UserID is not available');
         }
       } catch (error) {
         setError('Error fetching user profile');
@@ -51,15 +53,15 @@ const Profile = () => {
     e.preventDefault();
     try {
       const loggedInUser = JSON.parse(localStorage.getItem('user'));
-      const response = await axios.get(`http://localhost:3000/users/${loggedInUser.id}`);
-      const currentUserData = response.data;
+      const response = await axios.get(`http://localhost:4000/users/getUserById/${loggedInUser.User.UserID}`);
+      const currentUserData = response.data[0]; 
 
       const updatedUserData = {
         ...currentUserData,
         ...userData,
       };
 
-      await axios.put(`http://localhost:3000/users/${loggedInUser.id}`, updatedUserData);
+      await axios.put(`http://localhost:4000/users/getUserById/${loggedInUser.User.UserID}`, updatedUserData);
       setSuccessMessage('Profile updated successfully');
       setTimeout(() => {
         setSuccessMessage(null);
