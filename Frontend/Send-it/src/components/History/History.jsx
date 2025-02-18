@@ -22,12 +22,16 @@ const History = () => {
   useEffect(() => {
     const fetchPackagesAndUsers = async () => {
       try {
+        const loggedInUser = JSON.parse(localStorage.getItem('user'));
+        if (!loggedInUser || !loggedInUser.User || !loggedInUser.User.UserID) {
+          throw new Error("User is not logged in or UserID is not available");
+        }
         const [packagesResponse, usersResponse] = await Promise.all([
-          axios.get("http://localhost:3000/parcels"),
-          axios.get("http://localhost:3000/users"),
+          axios.get('http://localhost:4000/parcel/parcels'),
+          axios.get(`http://localhost:4000/users/getUserById/${loggedInUser.User.UserID}`)
         ]);
-        setPackages(packagesResponse.data);
-        setUsers(usersResponse.data);
+        setPackages(packagesResponse.data.data || []); // Ensure packages is an array
+        setUsers(usersResponse.data || []); // Ensure users is an array
       } catch (err) {
         setError(err.message || "An error occurred while fetching data.");
       } finally {
@@ -38,24 +42,24 @@ const History = () => {
     fetchPackagesAndUsers();
   }, []);
 
-  const getUserNameById = (id) => {
-    const user = users.find((user) => user.id === id);
+  const getUserNameById = (UserID) => {
+    const user = users.find((user) => user.UserID === UserID);
     return user ? user.FullName : "Unknown";
   };
 
-  const filteredPackages = packages.filter((pkg) => {
+  const filteredPackages = Array.isArray(packages) ? packages.filter((pkg) => {
     const loggedInUser = JSON.parse(localStorage.getItem("user"));
     if (!loggedInUser) return false;
     const isSenderOrReceiver =
-      pkg.SenderID === loggedInUser.id || pkg.ReceiverID === loggedInUser.id;
+      pkg.SenderID === loggedInUser.User.UserID || pkg.ReceiverID === loggedInUser.User.UserID;
     if (!isSenderOrReceiver) return false;
     if (pkg.Status !== "Picked") return false;
-    if (selectedRole === "Sender" && pkg.SenderID !== loggedInUser.id)
+    if (selectedRole === "Sender" && pkg.SenderID !== loggedInUser.User.UserID)
       return false;
-    if (selectedRole === "Receiver" && pkg.ReceiverID !== loggedInUser.id)
+    if (selectedRole === "Receiver" && pkg.ReceiverID !== loggedInUser.User.UserID)
       return false;
     return true;
-  });
+  }) : [];
 
   return (
     <section>

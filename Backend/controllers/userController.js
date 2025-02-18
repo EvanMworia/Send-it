@@ -95,7 +95,7 @@ export async function login(req, res) {
 		const user = userFound[0];
 
 		// Compare password
-		const isPasswordMatch = await bcrypt.compare(Password, user.Password);
+		const isPasswordMatch = await bcrypt.compare(Password, user.PasswordHash);
 		if (!isPasswordMatch) {
 			console.log('Invalid Credentials');
 			return res.status(401).json({ message: 'Invalid Credentials' });
@@ -108,7 +108,10 @@ export async function login(req, res) {
 			expiresIn: '1h',
 		});
 
-		return res.json({ message: 'Login successful', token });
+		return res.json({ message: 'Login successful', token,
+			Role:user.Role,
+			User: user
+		 });
 	} catch (error) {
 		console.error('Error logging in:', error);
 		return res.status(500).json({ message: 'Server Error' });

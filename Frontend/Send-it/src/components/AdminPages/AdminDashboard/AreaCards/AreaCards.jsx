@@ -11,7 +11,7 @@ const AreaCards = () => {
   useEffect(() => {
     const fetchParcelData = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/parcels");
+        const response = await axios.get("http://localhost:4000/parcel/parcels");
         const parcels = response.data;
         setParcelData(parcels);
       } catch (error) {
@@ -33,9 +33,9 @@ const AreaCards = () => {
   }
 
   const totalParcels = parcelData.length;
-  const deliveredParcels = parcelData.filter(parcel => parcel.Status === "Delivered").length;
-  const inTransitParcels = parcelData.filter(parcel => parcel.Status === "In Transit").length;
-  const pendingParcels = parcelData.filter(parcel => parcel.Status === "Pending").length;
+  const deliveredParcels = Object.values(parcelData).filter(parcel => parcel.Status === "Delivered").length;
+  const inTransitParcels = Object.values(parcelData).filter(parcel => parcel.Status === "In Transit").length;
+  const pendingParcels = Object.values(parcelData).filter(parcel => parcel.Status === "pending").length;
 
   const calculatePercentage = (count) => {
     return totalParcels > 0 ? ((count / totalParcels) * 100).toFixed(2) : 0;

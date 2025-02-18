@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: true })); // Middleware to parse form dat
 // Routes
 app.use('/users', userRouter);
 
-app.use('/', parcelRouter);
+app.use('/parcel', parcelRouter);
 
 // Start Server
 const PORT = process.env.PORT || 5000;
