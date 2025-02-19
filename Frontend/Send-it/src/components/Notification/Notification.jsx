@@ -17,16 +17,15 @@ const Notification = () => {
           return;
         }
 
-        const response = await axios.get('http://localhost:3000/parcels');
+        const response = await axios.get('http://localhost:4000/parcel/parcels');
         const parcels = response.data;
-
-        const userNotifications = parcels.filter(
-          (parcel) => parcel.ReceiverID === loggedInUser.id && parcel.Status === 'Delivered'
+        const userNotifications = Object.values(parcels).filter(
+          (parcel) => parcel.ReceiverID === loggedInUser.User.UserID && parcel.Status === 'Delivered'
         );
 
         setNotifications(userNotifications);
       } catch (err) {
-        setError('Error fetching notifications');
+        setError(err.message);
       } finally {
         setLoading(false);
       }

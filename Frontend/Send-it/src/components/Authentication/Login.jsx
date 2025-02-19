@@ -40,17 +40,11 @@ const Login = () => {
     if (!valid) return;
 
     try {
-      const response = await axios.get(`http://localhost:3000/users?Email=${email}`);
-      const users = response.data;
-      if (users.length === 0) {
-        setErrorMessage("User not found.");
-        return;
-      }
-      const user = users[0];
-      if (user.Password !== password) {
-        setErrorMessage("Invalid email or password.");
-        return;
-      }
+      const response = await axios.post("http://localhost:4000/users/login", {
+        Email: email,
+        Password: password,
+      });
+      const user = response.data;
       localStorage.setItem("user", JSON.stringify(user));
       console.log("Login successful");
       if (user.Role === "Admin") {
@@ -60,7 +54,7 @@ const Login = () => {
       }
     } catch (error) {
       console.error("Login error:", error);
-      setErrorMessage("An error occurred. Please try again later.");
+      setErrorMessage("Invalid email or password.");
     }
   };
 

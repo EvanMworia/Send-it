@@ -129,7 +129,7 @@ const Sidebar = () => {
                 </NavLink>
               </li>
             )}
-            {user?.Role === 'Admin' && (
+            {user?.Role === 'User' && (
               <li className="menu-item">
                 <NavLink to="/delivery" className="menu-link" activeclassname="active">
                   <span className="menu-link-icon">

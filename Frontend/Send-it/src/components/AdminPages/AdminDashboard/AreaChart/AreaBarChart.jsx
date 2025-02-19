@@ -13,7 +13,7 @@ import { FaArrowUpLong } from "react-icons/fa6";
 import { LIGHT_THEME } from "../../../../constants/themeConstants";
 import axios from "axios";
 import "./AreaChart.scss";
-import { format, parseISO } from "date-fns";
+import { format } from "date-fns";
 
 const AreaBarChart = () => {
   const { theme } = useContext(ThemeContext);
@@ -22,14 +22,16 @@ const AreaBarChart = () => {
   useEffect(() => {
     const fetchParcelData = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/parcels");
-        const parcels = response.data;
+        const response = await axios.get("http://localhost:4000/parcel/parcels");
+        const parcels = response.data.data || [];
         const monthlyData = parcels.reduce((acc, parcel) => {
-          const month = format(parseISO(parcel.CreatedAt), "MMM");
-          if (!acc[month]) {
-            acc[month] = { month, count: 0 };
+          if (parcel.CreatedAt) { 
+            const month = format(new Date(parcel.CreatedAt), "MMM");
+            if (!acc[month]) {
+              acc[month] = { month, count: 0 };
+            }
+            acc[month].count += 1;
           }
-          acc[month].count += 1;
           return acc;
         }, {});
         const chartData = Object.values(monthlyData);
@@ -60,7 +62,6 @@ const AreaBarChart = () => {
         <h5 className="bar-chart-title">Parcels Processed this Year</h5>
         <div className="chart-info-data">
           <div className="info-data-value">{data.reduce((acc, item) => acc + item.count, 0)}</div>
-          
         </div>
       </div>
       <div className="bar-chart-wrapper">
