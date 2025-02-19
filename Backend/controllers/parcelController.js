@@ -1,6 +1,7 @@
 import { validateParcel, validateDelete, validateStatus } from '../models/parcelModel.js';
 import { DbHelper } from '../Database/DbHelper.js';
-import { notifyParcelRecepient, notifyParcelSender, sendUpdateEmail } from '../services/emailService.js';
+import { sendSMSToRecepient } from '../controllers/sendSMS.js';
+import { notifyParcelRecepient, notifyParcelSender } from '../services/emailService.js';
 import { v4 as uid } from 'uuid';
 
 const db = new DbHelper();
@@ -87,13 +88,14 @@ async function createParcel(req, res) {
 
 		let parcelId = uid();
 		// Destructure the validated data
-		const { senderEmail, receiverEmail, sendingLocation, pickupLocation } = value;
+		const { senderEmail, receiverEmail, receiverPhone, sendingLocation, pickupLocation } = value;
 
 		// Execute the stored procedure to create a new parcel
 		let results = await db.executeProcedure('UpdinsParcel', {
 			ParcelID: parcelId,
 			SenderEmail: senderEmail,
 			ReceiverEmail: receiverEmail,
+			ReceiverPhone: receiverPhone,
 			SendingLocation: sendingLocation,
 			PickupLocation: pickupLocation,
 			Status: 'Pending',
@@ -108,6 +110,7 @@ async function createParcel(req, res) {
 		//SHOULD SEND A NOTIFICATION EMAIL HERE
 		await notifyParcelRecepient(senderEmail, receiverEmail, parcelId, pickupLocation);
 		await notifyParcelSender(senderEmail, receiverEmail, parcelId, pickupLocation);
+		// await sendSMSToRecepient(senderEmail, receiverPhone, parcelId, pickupLocation);
 	} catch (error) {
 		console.error('Error creating parcel:', error);
 		res.status(500).json({
@@ -211,9 +214,18 @@ async function deleteParcel(req, res) {
 }
 
 //=============SHOULD BE GET PARCELS ASSOCIATED BY SENDER EMAIL=========================
+console.log('.............');
+
 async function getUsersSendingParcels(req, res) {
+	console.log(req.user);
+	console.log('lllllllllllllllllllll');
+
 	try {
-		const { senderEmail } = req.params; // Extract senderEmail from route parameters
+		// const { senderEmail } = req.params; // Extract senderEmail from route parameters
+		console.log(req.user);
+
+		const senderEmail = req.user.email;
+		console.log(senderEmail);
 
 		if (!senderEmail) {
 			return res.status(400).json({
@@ -228,6 +240,7 @@ async function getUsersSendingParcels(req, res) {
 			ReceiverEmail: null,
 			Status: null,
 		});
+		console.log('database result', result);
 
 		if (!result.recordset.length) {
 			return res.status(404).json({

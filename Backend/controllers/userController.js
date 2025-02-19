@@ -7,6 +7,7 @@ import path from 'path';
 import dotenv from 'dotenv';
 import { fileURLToPath } from 'url'; //HELPER TO LOCATE OUR POSITION OF DB.JS
 import { sendWelcomeEmail } from '../services/emailService.js';
+import { sendWelcomeSMS } from './sendSMS.js';
 
 //GETTING OUR CURRENT LOCATION(of the file (in this case db.js))
 const __filename = fileURLToPath(import.meta.url);
@@ -51,6 +52,7 @@ export async function registerNewUser(req, res) {
 		res.status(201).json({
 			message: `User ${FullName} has been created successfully`,
 		});
+		// sendWelcomeSMS(Phone, FullName);
 		sendWelcomeEmail(Email, FullName);
 	} catch (error) {
 		console.error('Error happened ', error);
@@ -104,11 +106,15 @@ export async function login(req, res) {
 		console.log('Passwords MATCH');
 
 		// Generate JWT Token
-		const token = jwt.sign({ userId: user.UserID, role: user.Role }, process.env.JWT_SECRET, {
-			expiresIn: '1h',
-		});
+		const token = jwt.sign(
+			{ userId: user.UserID, email: user.Email, phone: user.Phone, role: user.Role },
+			process.env.JWT_SECRET,
+			{
+				expiresIn: '1h',
+			}
+		);
 
-		return res.json({ message: 'Login successful', token });
+		return res.json({ message: 'Login successful', token, user: user });
 	} catch (error) {
 		console.error('Error logging in:', error);
 		return res.status(500).json({ message: 'Server Error' });
