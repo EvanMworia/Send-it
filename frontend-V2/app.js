@@ -84,12 +84,27 @@ async function login() {
 			},
 			body: JSON.stringify(data),
 		});
-		console.log(res);
-		console.log(res.body);
+
+		const result = await res.json();
+		console.log('The result we are storing is', result);
+
 		if (res.ok) {
+			localStorage.setItem('token', result.token);
+			localStorage.setItem('USER', JSON.stringify(result.user));
+
+			localStorage.setItem('isLoggedIn', 'true');
 			console.log('Login was successful');
-			console.log(res.body);
-			window.location.href = './index.html';
+			console.log('the result user', result.user);
+			console.log('the Entire result', result);
+			console.log('the Entire result', result.user.Role);
+
+			// window.location.href = './index.html';
+			// let logoutBtn = document.querySelector('#log-out');
+			// let authBtns = document.querySelectorAll('.btn-outline');
+			// authBtns.forEach((btn) => {
+			// 	btn.classList.add('hide');
+			// });
+			// logoutBtn.classList.remove('hide');
 		} else {
 			throw new Error(`HTTP ERROR ${res.status}: ${res.statusText}`);
 		}
@@ -97,6 +112,21 @@ async function login() {
 		console.error('What went wrong is : ', error);
 	}
 }
+//listen for the window load after login and hide unneccasrry buttons
+window.onload = function () {
+	let isLoggedIn = localStorage.getItem('isLoggedIn');
+	let logoutBtn = document.querySelector('#log-out');
+	let authBtns = document.querySelectorAll('.btn-outline');
+
+	if (isLoggedIn === 'true') {
+		authBtns.forEach((btn) => btn.classList.add('hide')); // Hide login/signup
+		logoutBtn.classList.remove('hide'); // Show logout
+	} else {
+		authBtns.forEach((btn) => btn.classList.remove('hide')); // Show login/signup
+		logoutBtn.classList.add('hide'); // Hide logout
+	}
+};
+
 //mbona hii inakata kuwekwa event listener hapa, lakini kwa html inafanya
 document.addEventListener('DOMContentLoaded', () => {
 	let loginBtn = document.querySelector('#login-btn');
@@ -119,10 +149,15 @@ async function getUserById() {
 getUserById();
 // ===============================HISTORY PAGE HANDLER=======================================================
 async function getAllParcels() {
+	const token = localStorage.getItem('token'); // Retrieve token from storage
+	if (!token) {
+		alert('User not authenticated');
+		return;
+	}
 	console.log('get all parcels was called');
 	try {
 		let res = await fetch('http://localhost:5000/parcels');
-
+		console.log(res);
 		let result = await res.json();
 		// console.log('These are all the parcels we found ', result);
 		return result;

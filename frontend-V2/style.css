@@ -38,6 +38,12 @@ body {
 	color: white;
 	font-size: 16px;
 }
+/* #log-out {
+	display: none;
+} */
+.hide {
+	display: none;
+}
 .btn-outline {
 	padding: 8px 15px;
 	border: 2px solid #f5a623;

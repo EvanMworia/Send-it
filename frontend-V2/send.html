@@ -4,6 +4,53 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Send-Parcel</title>
+		<!-- <script defer src="./send.js"></script> -->
+		<style>
+			.container {
+				max-width: 500px;
+				margin: 50px auto;
+				text-align: center;
+			}
+			button {
+				padding: 10px 20px;
+				font-size: 18px;
+				cursor: pointer;
+			}
+		</style>
 	</head>
-	<body></body>
+	<body>
+		<div class="container">
+			<h2>Pay for Your Parcel Delivery</h2>
+			<input type="email" name="" id="senderEmail" placeholder="senderEmail" /><br /><br />
+			<input type="email" name="" id="receiverEmail" placeholder="receiverEmail" /><br /><br />
+			<input type="text" name="" id="sendingLocation" placeholder="sendingLocation" /><br /><br />
+			<input type="text" name="" id="pickupLocation" placeholder="pickupLocation" /><br />
+			<br />
+			<button id="checkout-button">Pay To Send Parcel</button>
+		</div>
+
+		<!-- <input type="email" name="" id="senderEmail" placeholder="senderEmail" /><br /><br />
+		<input type="email" name="" id="receiverEmail" placeholder="receiverEmail" /><br /><br />
+		<input type="text" name="" id="sendingLocation" placeholder="sendingLocation" /><br /><br />
+		<input type="text" name="" id="pickupLocation" placeholder="pickupLocation" /><br />
+		<br />
+		<button id="create-parcel">PAY TO SEND PARCEL</button> -->
+		<script>
+			const checkoutButton = document.getElementById('checkout-button');
+			checkoutButton.addEventListener('click', async () => {
+				const amount = 1000;
+				const response = await fetch('http://localhost:5000/payment/create-checkout-session', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ amount: amount }), // Send amount correctly
+				});
+				const session = await response.json();
+				if (session.url) {
+					window.location.href = session.url; // Redirect to Stripe Checkout
+				} else {
+					console.error('Stripe URL not found in session:', session);
+				}
+			});
+		</script>
+	</body>
 </html>

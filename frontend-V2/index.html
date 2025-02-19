@@ -11,7 +11,7 @@
 			rel="stylesheet"
 		/>
 		<link rel="stylesheet" href="style.css" />
-		<script defer src="app.js"></script>
+		<script defer src="./app.js"></script>
 	</head>
 	<body>
 		<div class="container">
@@ -23,6 +23,7 @@
 					<li><a href="./send.html">Send</a></li>
 					<li><a href="./register.html" class="btn-outline">Sign-up</a></li>
 					<li><a href="./login.html" class="btn-outline">Login</a></li>
+					<li><a href="./index.html" id="log-out" class="btn-outline hide">Logout</a></li>
 				</ul>
 			</nav>
 			<section class="hero">
@@ -50,5 +51,27 @@
 				</div>
 			</section>
 		</div>
+		<script>
+			//listen for the window load after login and hide unneccasrry buttons
+			window.onload = function () {
+				let isLoggedIn = localStorage.getItem('isLoggedIn');
+				let logoutBtn = document.querySelector('#log-out');
+				let authBtns = document.querySelectorAll('.btn-outline');
+
+				if (isLoggedIn === 'true') {
+					authBtns.forEach((btn) => btn.classList.add('hide')); // Hide login/signup
+					logoutBtn.classList.remove('hide'); // Show logout
+				} else {
+					authBtns.forEach((btn) => btn.classList.remove('hide')); // Show login/signup
+					logoutBtn.classList.add('hide'); // Hide logout
+				}
+			};
+
+			document.querySelector('#log-out').addEventListener('click', function () {
+				localStorage.removeItem('token');
+				localStorage.removeItem('isLoggedIn');
+				window.location.href = './index.html'; // Redirect after logout
+			});
+		</script>
 	</body>
 </html>
