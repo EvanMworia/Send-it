@@ -3,8 +3,10 @@ import express, { json } from 'express';
 import cors from 'cors';
 import userRouter from './routes/userRoutes.js';
 import parcelRouter from './routes/parcelRoutes.js';
+import paymentRouter from './routes/paymentRoutes.js';
 
 const app = express();
+app.use(express.static('public')); // Serve static files (frontend)
 // app.use(express.json);
 app.use(json()); // Parse JSON requests
 // Middleware
@@ -17,6 +19,8 @@ app.use(cors());
 app.use('/users', userRouter);
 
 app.use('/', parcelRouter);
+
+app.use('/payment', paymentRouter);
 
 // Start Server
 const PORT = process.env.PORT || 5000;
