@@ -34,6 +34,39 @@ export async function sendSMS() {
 		console.error(ex);
 	}
 }
+export async function sendWelcomeSMS(receipientPhone, appUserName) {
+	// TODO: Send message
+	try {
+		const result = await africastalking.SMS.send({
+			// to: process.env.AT_RECEIVER,
+			to: [`${receipientPhone}`],
+			message: `Hello ${appUserName}, Welcome to SendIt.! 
+				We’re excited to have you on board. You can now send and track your parcels with ease.
+				Get started now by logging in and creating your first parcel order.
+				Best regards, SendIt Team`,
+		});
+		console.log(result);
+	} catch (ex) {
+		console.error(ex);
+	}
+}
+export async function sendSMSToRecepient(parcelSender, parcelReceipientPhone, parcelId, pickupLocation) {
+	// TODO: Send message
+	try {
+		const result = await africastalking.SMS.send({
+			// to: process.env.AT_RECEIVER,
+			to: [`${parcelReceipientPhone}`],
+			message: `Parcel Comming your way.
+				${parcelSender} has sent you a parcel, with id: ${parcelId}, the pickup point is ${pickupLocation}. We will notify you once your parcel arrives
+				NOTE: Keep the tracking number/id PRIVATE since we will need you to provide it when you collect your parcel.
+				Thankyou for choosing SendIt
+				Best regards.`,
+		});
+		console.log(result);
+	} catch (ex) {
+		console.error(ex);
+	}
+}
 async function smsServer() {
 	const app = express();
 
