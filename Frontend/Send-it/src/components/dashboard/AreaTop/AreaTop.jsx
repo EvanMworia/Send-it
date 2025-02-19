@@ -48,7 +48,7 @@ const AreaTop = () => {
       try {
         const loggedInUser = JSON.parse(localStorage.getItem('user'));
         if (loggedInUser) {
-          const response = await axios.get(`http://localhost:3000/users/${loggedInUser.id}`);
+          const response = await axios.get(`http://localhost:4000/users/${loggedInUser.id}`);
           const user = response.data;
           setProfilePicture(user.ProfilePicture);
         }

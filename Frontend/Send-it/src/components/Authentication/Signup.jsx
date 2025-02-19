@@ -40,7 +40,8 @@ const Signup = () => {
   };
 
   const register = async (userData) => {
-    const response = await axios.post("http://localhost:3000/users", userData);
+    const response = await axios.post("http://localhost:4000/users/registerUser", userData);
+    console.log('response', response);
     return response;
   };
 
@@ -88,9 +89,7 @@ const Signup = () => {
         Phone: formData.phone,
         Password: formData.password,
         Role: "User",
-        CreatedAt: new Date(),
-        IsDeleted: false,
-        ProfilePicture: ""
+        ProfilePicture: "joi"
       };
       const response = await register(userData);
       if (response.status === 201) {

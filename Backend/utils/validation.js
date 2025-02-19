@@ -5,7 +5,7 @@ export const registerUserSchema = Joi.object({
 	Email: Joi.string().email().required(),
 	// PasswordHash: Joi.string().required().pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$')),
 	Password: Joi.string().required(),
-	ProfilePicture: Joi.string().required(),
-	Phone: Joi.string().required(),
+	ProfilePicture: Joi.string(),
+	Phone: Joi.number().required(),
 	Role: Joi.string().required(),
 });

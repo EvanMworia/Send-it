@@ -8,19 +8,19 @@ const majorTowns = [
 
 // Parcel Schema
 const parcelSchema = Joi.object({
-    senderId: Joi.string().uuid().required().messages({
-        'string.empty': 'Sender ID is required.',
-        'string.guid': 'Sender ID must be a valid UUID.',
+    senderEmail: Joi.string().required().messages({
+        'string.empty': 'Sender email is required.',
+        'string.email': 'Sender email must be a valid email address.',
     }),
-    receiverId: Joi.string().uuid().required().messages({
-        'string.empty': 'Receiver ID is required.',
-        'string.guid': 'Receiver ID must be a valid UUID.',
+    receiverEmail: Joi.string().required().messages({
+        'string.empty': 'Receiver Email is required.',
+        'string.email': 'Receiver email must be a valid email address.',
     }),
-    sendingLocation: Joi.string().valid(...majorTowns).required().messages({
+    SendingLocation: Joi.string().valid(...majorTowns).required().messages({
         'any.only': `Sending location must be one of: ${majorTowns.join(', ')}.`,
         'string.empty': 'Sending location is required.'
     }),
-    pickupLocation: Joi.string().valid(...majorTowns).required().messages({
+    PickupLocation: Joi.string().valid(...majorTowns).required().messages({
         'any.only': `Pickup location must be one of: ${majorTowns.join(', ')}.`,
         'string.empty': 'Pickup location is required.'
     }),

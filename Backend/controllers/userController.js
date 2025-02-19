@@ -16,7 +16,7 @@ const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 const db = new DbHelper();
-console.log('shdddd', process.env.JWT_SECRET);
+
 export async function registerNewUser(req, res) {
 	try {
 		//validate the request body against the defined schema
@@ -27,7 +27,8 @@ export async function registerNewUser(req, res) {
 		}
 
 		//if validation is valid, extract the things we need from the body
-		const { FullName, Email, Password, ProfilePicture, Phone, Role } = req.body;
+		const { FullName, Email, Password, Phone, Role } = req.body;
+		const ProfilePicture= null;
 
 		const existingEmail = await db.executeProcedure('GetUserByEmail', { Email: Email });
 		console.log(existingEmail);
@@ -108,7 +109,9 @@ export async function login(req, res) {
 			expiresIn: '1h',
 		});
 
-		return res.json({ message: 'Login successful', token });
+		return res.json({ message: 'Login successful',
+			User: user,
+			Role: user.Role, token });
 	} catch (error) {
 		console.error('Error logging in:', error);
 		return res.status(500).json({ message: 'Server Error' });

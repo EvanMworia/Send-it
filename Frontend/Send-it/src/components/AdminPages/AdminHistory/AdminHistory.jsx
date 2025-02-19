@@ -21,8 +21,8 @@ const AdminHistory = () => {
     const fetchParcelAndUserData = async () => {
       try {
         const [parcelsResponse, usersResponse] = await Promise.all([
-          axios.get("http://localhost:3000/parcels"),
-          axios.get("http://localhost:3000/users"),
+          axios.get("http://localhost:4000/parcels"),
+          axios.get("http://localhost:4000/users/getAllUsers"),
         ]);
         setParcelData(parcelsResponse.data);
         setUserData(usersResponse.data);

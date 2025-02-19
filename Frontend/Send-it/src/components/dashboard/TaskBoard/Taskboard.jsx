@@ -28,8 +28,8 @@ const Taskboard = () => {
     const fetchPackagesAndUsers = async () => {
       try {
         const [packagesResponse, usersResponse] = await Promise.all([
-          axios.get('http://localhost:3000/parcels'),
-          axios.get('http://localhost:3000/users')
+          axios.get('http://localhost:4000/parcels'),
+          axios.get('http://localhost:4000/users/getAllUsers')
         ]);
         setPackages(packagesResponse.data);
         setUsers(usersResponse.data);

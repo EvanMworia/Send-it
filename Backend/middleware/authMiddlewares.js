@@ -27,4 +27,4 @@ export function authenticateJWT(req, res, next) {
 	}
 }
 
-console.log('shdddd', process.env.JWT_SECRET);
+

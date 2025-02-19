@@ -11,7 +11,7 @@ const AreaCards = () => {
   useEffect(() => {
     const fetchParcelData = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/parcels");
+        const response = await axios.get("http://localhost:4000/parcels");
         const parcels = response.data;
         setParcelData(parcels);
       } catch (error) {

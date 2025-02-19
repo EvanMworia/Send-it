@@ -7,7 +7,7 @@ import parcelRouter from './routes/parcelRoutes.js';
 const app = express();
 app.use(json()); // P
 // Middleware
-app.use(cors({ origin: 'http://localhost:3001', credentials: true }));
+app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
 //arse JSON requests
 
 app.use(express.urlencoded({ extended: true })); // Middleware to parse form data

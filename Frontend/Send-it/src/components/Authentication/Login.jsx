@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import axios from "axios";
 import animation from "../../assets/images/authentication-preview.png";
 import "./Login.css";
-import axios from "axios";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -10,7 +10,7 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [emailError, setEmailError] = useState(null);
   const [passwordError, setPasswordError] = useState(null);
-
+  
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
@@ -40,27 +40,31 @@ const Login = () => {
     if (!valid) return;
 
     try {
-      const response = await axios.get(`http://localhost:3000/users?Email=${email}`);
-      const users = response.data;
-      if (users.length === 0) {
-        setErrorMessage("User not found.");
-        return;
-      }
-      const user = users[0];
-      if (user.Password !== password) {
-        setErrorMessage("Invalid email or password.");
-        return;
-      }
-      localStorage.setItem("user", JSON.stringify(user));
-      console.log("Login successful");
-      if (user.Role === "Admin") {
+      const response = await axios.post("http://localhost:4000/users/login", {
+        Email: email,
+        Password: password,
+      });
+      
+      const { token, Role, User } = response.data;
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(User));
+
+
+      console.log("Login succes`sful");
+      
+      // Conditional navigation based on user role
+      if (Role === "Admin") {
         navigate("/dashboard");
       } else {
         navigate("/");
       }
     } catch (error) {
+      if (error.response) {
+        setErrorMessage(error.response.data.message);
+      } else {
+        setErrorMessage("An error occurred. Please try again later.");
+      }
       console.error("Login error:", error);
-      setErrorMessage("An error occurred. Please try again later.");
     }
   };
 
