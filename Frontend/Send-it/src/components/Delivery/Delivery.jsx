@@ -3,14 +3,15 @@ import axios from "axios";
 import Select from "react-select";
 import { useNavigate } from "react-router-dom";
 import "./Delivery.css";
+import { stat } from "fs";
 
 const Delivery = () => {
   const [formData, setFormData] = useState({
-    senderId: "",
-    receiverId: "",
+ 
+    senderEmail: "",
+    receiverEmail: "",
     sendingLocation: "",
-    pickupLocation: "",
-    status: "Pending",
+    pickupLocation: ""
   });
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -104,7 +105,7 @@ const Delivery = () => {
   };
 
   const userOptions = users.map((user) => ({
-    value: user.UserID,
+    value: user.Email,
     label: user.FullName,
   }));
 
@@ -118,9 +119,9 @@ const Delivery = () => {
           <div>
             <label>Sender:</label>
             <Select
-              name="senderId"
+              name="senderEmail"
               value={userOptions.find(
-                (option) => option.value === formData.senderId
+                (option) => option.value === formData.senderEmail
               )}
               onChange={handleSelectChange}
               options={userOptions}
@@ -132,9 +133,9 @@ const Delivery = () => {
           <div>
             <label>Receiver:</label>
             <Select
-              name="receiverId"
+              name="receiverEmail"
               value={userOptions.find(
-                (option) => option.value === formData.receiverId
+                (option) => option.value === formData.receiverEmail
               )}
               onChange={handleSelectChange}
               options={userOptions}

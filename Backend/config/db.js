@@ -38,5 +38,5 @@ async function test() {
 		console.error(error);
 	}
 }
-test();
+// test();
 //export { sqlConfig };

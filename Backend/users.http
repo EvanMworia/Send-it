@@ -21,8 +21,8 @@ Content-Type: application/json
 
 }
 ####
-GET http://localhost:5000/users/getAllUsers
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJkYTJjMDk5Mi1jYTJhLTRlNmItODA0ZS05YTAyMDg3ZWVhNDUiLCJyb2xlIjoiQWRtaW4iLCJpYXQiOjE3Mzk0NDA1NDYsImV4cCI6MTczOTQ0NDE0Nn0.qLA9X3yua8_NjKD8ufQGyHduPZoBaJ2_JwQOZnIVSnI
+GET http://localhost:4000/users/getAllUsers
+
 #-----GETS ALL THE users FROM THE DATABASE THAT EXIST
 
 ######

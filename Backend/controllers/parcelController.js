@@ -1,8 +1,183 @@
 import { validateParcel, validateDelete, validateStatus } from '../models/parcelModel.js';
 import { DbHelper } from '../Database/DbHelper.js';
-import { sendUpdateEmail } from '../services/emailService.js';
+import Stripe from 'stripe';
+import fetch from 'node-fetch'; // Ensure this is installed
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+const db =new DbHelper();
 
-const db = new DbHelper();
+
+const CLIENT_URL = process.env.CLIENT_URL 
+// Function to geocode a location name into coordinates using Nominatim
+const geocodeLocation = async (location) => {
+    try {
+        const geocodingUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(location)}`;
+        const response = await fetch(geocodingUrl);
+
+        if (!response.ok) {
+            throw new Error(`Geocoding API error: ${response.status} ${response.statusText}`);
+        }
+
+        const data = await response.json();
+
+        if (!Array.isArray(data) || data.length === 0) {
+            throw new Error(`Geocoding failed for location: ${location}`);
+        }
+
+        const { lat, lon } = data[0];
+        return [parseFloat(lat), parseFloat(lon)]; // Return as [latitude, longitude]
+    } catch (error) {
+        console.error("Error geocoding location:", error);
+        throw error; // Re-throw the error for the calling function to handle
+    }
+};
+
+// Function to calculate distance using OSRM
+const calculateDistance = async (startCoords, endCoords) => {
+    try {
+        const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${startCoords[1]},${startCoords[0]};${endCoords[1]},${endCoords[0]}?overview=full`;
+        const response = await fetch(osrmUrl);
+
+        if (!response.ok) {
+            throw new Error(`OSRM API error: ${response.status} ${response.statusText}`);
+        }
+
+        const data = await response.json();
+
+        if (data.code !== 'Ok') {
+            throw new Error(`OSRM API returned an error: ${data.code}`);
+        }
+
+        if (!data.routes || data.routes.length === 0) {
+            throw new Error("No route found by OSRM");
+        }
+
+        return data.routes[0].distance / 1000; // Convert to kilometers
+    } catch (error) {
+        console.error("Error calculating distance:", error);
+        throw error; // Re-throw the error for the calling function to handle
+    }
+};
+
+// Function to calculate price based on distance
+const calculatePrice = (distance) => {
+    const ratePerKilometer = 0.75; // Example rate per kilometer
+    const baseFee = 7.00; // Example base fee
+    const price = baseFee + (distance * ratePerKilometer);
+    return price;
+};
+
+// Controller function to create a parcel and initiate Stripe payment
+async function createParcel  (req, res) {
+    try {
+        // Validate incoming request data using the existing validateParcel function
+        const { error, value } = validateParcel(req.body);
+
+        if (error) {
+            return res.status(400).json({
+                success: false,
+                message: "Validation error",
+                errors: error.details.map(detail => ({
+                    field: detail.path[0],
+                    message: detail.message
+                }))
+            });
+        }
+
+        // Destructure the validated data
+        const { senderEmail, senderPhone, receiverEmail, receiverPhone, SendingLocation, PickupLocation } = value;
+
+        // --- Geocode Locations ---
+        let sendingCoordinates;
+        let pickupCoordinates;
+
+        try {
+            sendingCoordinates = await geocodeLocation(SendingLocation);
+            pickupCoordinates = await geocodeLocation(PickupLocation);
+        } catch (geocodingError) {
+            return res.status(500).json({
+                success: false,
+                message: "Error geocoding locations",
+                error: geocodingError.message,
+            });
+        }
+
+        console.log(`Geocoded Sending Location: ${sendingCoordinates}`);
+        console.log(`Geocoded Pickup Location: ${pickupCoordinates}`);
+
+        // --- Calculate Distance and Price ---
+        let distance;
+        let price;
+
+        try {
+            distance = await calculateDistance(sendingCoordinates, pickupCoordinates);
+            price = calculatePrice(distance);
+        } catch (distanceError) {
+            return res.status(500).json({
+                success: false,
+                message: "Error calculating distance or price",
+                error: distanceError.message,
+            });
+        }
+
+        console.log(`Distance: ${distance} km, Price: $${price.toFixed(2)}`);
+
+        // --- Create Stripe Checkout Session ---
+        const session = await stripe.checkout.sessions.create({
+            payment_method_types: ['card'],
+            line_items: [{
+                price_data: {
+                    currency: 'usd', // Or your preferred currency
+                    product_data: {
+                        name: 'Parcel Delivery',
+                        description: `Delivery from ${SendingLocation} to ${PickupLocation} (${distance.toFixed(2)} km)`,
+                    },
+                    unit_amount: Math.round(price * 100), // Amount in cents
+                },
+                quantity: 1,
+            }],
+            mode: 'payment',
+            success_url: `${CLIENT_URL}/success?session_id={CHECKOUT_SESSION_ID}`, // Replace with your success URL
+            cancel_url: `${CLIENT_URL}/cancel`, // Replace with your cancel URL
+            metadata: {
+                senderEmail,
+                receiverEmail,
+                SendingLocation,
+                PickupLocation,
+            },
+        });
+
+        // --- Execute the stored procedure to create a new parcel ---
+        let results = await db.executeProcedure("UpsertParcel", {
+            ParcelID: null, // NULL for new parcels
+            SenderEmail: senderEmail,
+            SenderPhone: senderPhone,
+            ReceiverEmail: receiverEmail,
+            ReceiverPhone: receiverPhone,
+            SendingLocation,
+            PickupLocation,
+            Status: "Pending", // Update status
+            Price: price,
+            Session: session.id, // Store the Stripe Session ID
+        });
+
+        console.log("Procedure Result:", results);
+
+        res.status(200).json({
+            success: true,
+            message: "Stripe session created",
+            sessionId: session.id,
+            stripeUrl: session.url
+        });
+
+    } catch (error) {
+        console.error("Error creating parcel:", error);
+        res.status(500).json({
+            success: false,
+            message: "Internal server error",
+            error: error.message,
+        });
+    }
+};
 
 const getAllParcels = async (req, res) => {
 	try {
@@ -56,51 +231,6 @@ async function getParcelById(req, res) {
 			});
 		}
 	} catch (error) {
-		res.status(500).json({
-			success: false,
-			message: 'Internal server error',
-			error: error.message,
-		});
-	}
-}
-async function createParcel(req, res) {
-	try {
-		// Validate incoming request data using the Joi schema
-		const { error, value } = validateParcel(req.body);
-
-		if (error) {
-			// If validation fails, return 400 with validation errors
-			return res.status(400).json({
-				success: false,
-				message: 'Validation error',
-				errors: error.details.map((detail) => ({
-					field: detail.path[0],
-					message: detail.message,
-				})),
-			});
-		}
-
-		// Destructure the validated data
-		const { senderId, receiverId, sendingLocation, pickupLocation } = value;
-
-		// Execute the stored procedure to create a new parcel
-		let results = await db.executeProcedure('UpsertParcel', {
-			ParcelID: null, // NULL for new parcels
-			SenderID: senderId,
-			ReceiverID: receiverId,
-			SendingLocation: sendingLocation,
-			PickupLocation: pickupLocation,
-			Status: 'Pending',
-		});
-
-		console.log('Procedure Result:', results);
-
-		res.status(201).json({
-			success: true,
-			message: 'Parcel created successfully',
-		});
-	} catch (error) {
-		console.error('Error creating parcel:', error);
 		res.status(500).json({
 			success: false,
 			message: 'Internal server error',
