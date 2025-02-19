@@ -24,6 +24,10 @@ const parcelSchema = Joi.object({
 		'string.empty': 'Receiver Email is required.',
 		'string.email': 'Receiver Email must be a valid Email And Should exist in the System..',
 	}),
+	receiverPhone: Joi.string().required().messages({
+		'string.empty': 'Receiver Phone is required.',
+		// 'string.email': 'Receiver Email must be a valid Email And Should exist in the System..',
+	}),
 	sendingLocation: Joi.string()
 		.valid(...majorTowns)
 		.required()
