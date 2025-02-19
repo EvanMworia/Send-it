@@ -19,9 +19,10 @@ Content-Type: application/json
 
 { 
     "senderEmail": "evansgith@gmail.com",
-    "receiverEmail": "kxngpanther@gmail.com",
+    "receiverEmail": "ivonnenabangala@gmail.com",
+    "receiverPhone": "+254751335348",
     "sendingLocation": "Nakuru",
-    "pickupLocation": "Nairobi"
+    "pickupLocation": "Nyeri"
     
 }
 

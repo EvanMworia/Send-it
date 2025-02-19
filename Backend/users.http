@@ -2,12 +2,12 @@ POST http://localhost:5000/users/registerUser
 Content-Type: application/json
 
 {
-    "FullName":"Sam",
-    "Email":"samwels036@gmail.com",
+    "FullName":"Brian Kyalo",
+    "Email":"deleteme2@gmail.com",
     "Password":"Test@2024",
     "ProfilePicture": "sbcbjs",
-    "Phone": "sncis",
-    "Role": "Admin" 
+    "Phone": "+254751335348",
+    "Role": "User" 
 
 }
 ####
@@ -16,7 +16,7 @@ Content-Type: application/json
 
 {
     
-    "Email":"Test1@example1.com",
+    "Email":"ivonnenabangala@gmail.com",
     "Password":"Test@2024"
 
 }
