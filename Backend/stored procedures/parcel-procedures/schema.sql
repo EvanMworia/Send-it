@@ -14,6 +14,7 @@ CREATE TABLE Parcels (
     ParcelID VARCHAR(255) PRIMARY KEY,
 	SenderEmail VARCHAR(255) FOREIGN KEY REFERENCES Users(Email),
 	ReceiverEmail VARCHAR(255) FOREIGN KEY REFERENCES Users(Email),
+    ReceiverPhone VARCHAR(255),
     SendingLocation VARCHAR(255),
     PickupLocation VARCHAR(255),
     Status VARCHAR(50) CHECK (Status IN ('Pending', 'In-Transit', 'Delivered', 'Picked')),
