@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>Send-It Parcel Payment</title>
+		<style>
+			.container {
+				max-width: 500px;
+				margin: 50px auto;
+				text-align: center;
+			}
+			button {
+				padding: 10px 20px;
+				font-size: 18px;
+				cursor: pointer;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<h2>Pay for Your Parcel Delivery</h2>
+			<button id="checkout-button">Pay $50</button>
+		</div>
+
+		<script>
+			const checkoutButton = document.getElementById('checkout-button');
+			checkoutButton.addEventListener('click', async () => {
+				const amount = 1000;
+				const response = await fetch('http://localhost:5000/payment/create-checkout-session', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ amount: amount }), // Send amount correctly
+				});
+				const session = await response.json();
+				if (session.url) {
+					window.location.href = session.url; // Redirect to Stripe Checkout
+				} else {
+					console.error('Stripe URL not found in session:', session);
+				}
+			});
+		</script>
+	</body>
+</html>
