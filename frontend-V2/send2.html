@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Parcel Payment</title>
+		<script type="module" src="send2.js" defer></script>
+		<script src="https://js.stripe.com/v3/"></script>
+		<link rel="stylesheet" href="styles.css" />
+	</head>
+	<body>
+		<form id="payment-form">
+			<input type="email" name="" id="senderEmail" placeholder="senderEmail" /><br /><br />
+			<input type="email" name="" id="receiverEmail" placeholder="receiverEmail" /><br /><br />
+			<input type="text" name="" id="sendingLocation" placeholder="sendingLocation" /><br /><br />
+			<input type="text" name="" id="pickupLocation" placeholder="pickupLocation" /><br />
+			<br />
+			<!-- <button id="create-parcel">PAY TO SEND PARCEL</button> -->
+
+			<!-- Stripe will inject the card input UI here -->
+			<div id="card-element"></div>
+
+			<button id="submit">Pay to Send Parcel</button>
+			<div id="payment-message"></div>
+		</form>
+	</body>
+</html>
