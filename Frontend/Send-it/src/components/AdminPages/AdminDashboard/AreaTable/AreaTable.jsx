@@ -34,8 +34,7 @@ const AreaTable = () => {
             },
           }),
         ]);
-        console.log(parcelsResponse.data); 
-        setParcelData(Array.isArray(parcelsResponse.data) ? parcelsResponse.data : []);
+        setParcelData(Array.isArray(parcelsResponse.data.data) ? parcelsResponse.data.data : []);
         setUserData(Array.isArray(usersResponse.data) ? usersResponse.data : []);
       } catch (error) {
         setError(error.message);

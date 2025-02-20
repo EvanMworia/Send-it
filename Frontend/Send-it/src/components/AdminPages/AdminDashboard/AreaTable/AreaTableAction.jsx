@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { HiDotsHorizontal } from "react-icons/hi";
 import { Link } from "react-router-dom";
 
-const AreaTableAction = ({ id }) => {
+const AreaTableAction = ({ ParcelID }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const handleDropdown = () => {
     setShowDropdown(!showDropdown);
@@ -35,12 +35,12 @@ const AreaTableAction = ({ id }) => {
           <div className="action-dropdown-menu" ref={dropdownRef}>
             <ul className="dropdown-menu-list">
               <li className="dropdown-menu-item">
-                <Link to={`/status/${id}`} className="dropdown-menu-link">
+                <Link to={`/status/${ParcelID}`} className="dropdown-menu-link">
                   Status
                 </Link>
               </li>
               <li className="dropdown-menu-item">
-                <Link to={`/delete/${id}`} className="dropdown-menu-link">
+                <Link to={`/delete/${ParcelID}`} className="dropdown-menu-link">
                   Delete
                 </Link>
               </li>

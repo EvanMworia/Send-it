@@ -4,7 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import "./Status.css";
 
 const Status = () => {
-  const { id } = useParams();
+  const { ParcelID } = useParams();
   const [parcelData, setParcelData] = useState(null);
   const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(true);
@@ -14,9 +14,9 @@ const Status = () => {
   useEffect(() => {
     const fetchParcelData = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/parcels/${id}`);
-        setParcelData(response.data);
-        setStatus(response.data.Status);
+        const response = await axios.get(`http://localhost:4000/parcel/parcels/${ParcelID}`);
+        setParcelData(response.data.data);
+        setStatus(response.data.data.Status);
       } catch (error) {
         setError("Error fetching parcel data");
       } finally {
@@ -24,10 +24,10 @@ const Status = () => {
       }
     };
 
-    if (id) {
+    if (ParcelID) {
       fetchParcelData();
     }
-  }, [id]);
+  }, [ParcelID]);
 
   const handleStatusChange = (e) => {
     setStatus(e.target.value);
@@ -39,14 +39,14 @@ const Status = () => {
     setError(null);
 
     try {
-      await axios.put(`http://localhost:3000/parcels/${id}`, {
-        ...parcelData,
-        Status: status,
-        UpdatedAt: new Date(),
+      const { ParcelID, Status } = parcelData;
+      await axios.put('http://localhost:4000/parcel/parcels/update', {
+        status,
+        ParcelID,
       });
       navigate("/dashboard");
     } catch (error) {
-      setError("Error updating parcel status");
+      setError(error.message);
     } finally {
       setLoading(false);
     }
