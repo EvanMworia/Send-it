@@ -93,7 +93,7 @@ const Delivery = () => {
           status: "Pending",
         });
         setTimeout(() => {
-          navigate("/dashboard");
+          navigate("/");
         }, 500);
       }
     } catch (error) {

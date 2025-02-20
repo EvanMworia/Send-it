@@ -30,7 +30,7 @@ const AdminHistory = () => {
             },
           }),
         ]);
-        setParcelData(parcelsResponse.data);
+        setParcelData(parcelsResponse.data.data);
         setUserData(usersResponse.data);
       } catch (error) {
         setError("Error fetching data");

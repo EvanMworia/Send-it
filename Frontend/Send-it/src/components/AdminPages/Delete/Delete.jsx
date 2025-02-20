@@ -4,7 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import './Delete.css';
 
 const Delete = () => {
-  const { id } = useParams();
+  const { ParcelID } = useParams();
   const [parcelData, setParcelData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -14,8 +14,8 @@ const Delete = () => {
   useEffect(() => {
     const fetchParcelData = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/parcels/${id}`);
-        setParcelData(response.data);
+        const response = await axios.get(`http://localhost:4000/parcel/parcels/${ParcelID}`);
+        setParcelData(response.data.data);
       } catch (error) {
         setError('Error fetching parcel data');
       } finally {
@@ -23,17 +23,17 @@ const Delete = () => {
       }
     };
 
-    if (id) {
+    if (ParcelID) {
       fetchParcelData();
     }
-  }, [id]);
+  }, [ParcelID]);
 
   const handleDelete = async () => {
     setLoading(true);
     setError(null);
 
     try {
-      await axios.delete(`http://localhost:3000/parcels/${id}`);
+      await axios.delete(`http://localhost:4000/parcel/parcels/${ParcelID}`);
       navigate('/dashboard');
     } catch (error) {
       setError('Error deleting parcel');
@@ -66,7 +66,7 @@ const Delete = () => {
     <section className="delete-section">
       <div className="delete-container">
         <h2>Delete Parcel</h2>
-        <p>Are you sure you want to delete the parcel with ID: {parcelData.id}?</p>
+        <p>Are you sure you want to delete the parcel with ID: {parcelData.ParcelID}?</p>
         <button onClick={handleShowModal} className="delete-button">Delete</button>
       </div>
 

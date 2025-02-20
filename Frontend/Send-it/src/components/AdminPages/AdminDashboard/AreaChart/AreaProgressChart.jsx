@@ -9,9 +9,9 @@ const AreaProgressChart = () => {
   useEffect(() => {
     const fetchParcelData = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/parcels");
-        const parcels = response.data;
-        const locationData = parcels.reduce((acc, parcel) => {
+        const response = await axios.get("http://localhost:4000/parcel/parcels");
+        const parcels = Array.isArray(response.data.data) ? response.data.data : [];
+        const locationData = Object.values(parcels).reduce((acc, parcel) => {
           const location = parcel.SendingLocation;
           if (!acc[location]) {
             acc[location] = { location, count: 0 };
@@ -27,7 +27,7 @@ const AreaProgressChart = () => {
 
         setData(chartData);
       } catch (error) {
-        setError("Error fetching parcel data");
+        setError(error.message);
       } finally {
         setLoading(false);
       }

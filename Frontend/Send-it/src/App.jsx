@@ -45,8 +45,8 @@ function App() {
             <Route path="/delivery" element={<Delivery />} />
             <Route path="/location" element={<Location />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="/status/:id" element={<Status />} />
-            <Route path="/status/:id" element={<Delete />} />
+            <Route path="/status/:ParcelID" element={<Status />} />
+            <Route path="/delete/:ParcelID" element={<Delete />} />
             <Route
               path="/dashboard"
               element={
