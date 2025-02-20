@@ -2,8 +2,7 @@ import React from 'react';
 import Modal from 'react-modal';
 
 import './Location.css';
-
-import MapComponent from '../Map/map';
+import Map from '../Map/map';
 
 const ParcelInformation = ({ isOpen, onRequestClose, parcel }) => {
   
@@ -17,7 +16,9 @@ const ParcelInformation = ({ isOpen, onRequestClose, parcel }) => {
       <p><strong>Sending Location:</strong> {parcel.SendingLocation}</p>
       <p><strong>Pickup Location:</strong> {parcel.PickupLocation}</p>
       <p><strong>Status:</strong> {parcel.Status}</p>
-      <MapComponent sendingLocation="Nairobi" pickupLocation="Mombasa" />
+      <Map  startLocation={parcel.SendingLocation} 
+        endLocation="parcel.PickupLocation"
+      />
       <button onClick={onRequestClose} className="close-button">Close</button>
     </Modal>
   );
