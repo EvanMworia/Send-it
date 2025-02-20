@@ -3,7 +3,7 @@ import Joi from 'joi';
 // List of allowed major towns
 const majorTowns = [
     'Nairobi', 'Mombasa', 'Kisumu', 'Nakuru', 'Eldoret',
-    'Thika', 'Malindi', 'Kitale', 'Garissa', 'Nyeri'
+    'Thika', 'Mwingi', 'Kitale', 'Garissa', 'Nyeri'
 ];
 
 // Parcel Schema
@@ -57,7 +57,7 @@ export { validateParcel };
 
 // Joi Schema for Validating Parcel Status
 const statusSchema = Joi.object({
-    parcelId: Joi.string().uuid().required().messages({
+    parcelId: Joi.required().messages({
         "string.empty": "Parcel ID is required.",
         "string.guid": "Parcel ID must be a valid UUID.",
     }),

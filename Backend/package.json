@@ -13,6 +13,7 @@
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
+		"africastalking": "^0.7.2",
 		"axios": "^1.7.9",
 		"bcryptjs": "^2.4.3",
 		"cors": "^2.8.5",
@@ -28,7 +29,8 @@
 		"node-fetch": "^3.3.2",
 		"nodemailer": "^6.10.0",
 		"socket.io": "^4.8.1",
-		"stripe": "^17.6.0"
+		"stripe": "^17.6.0",
+		"uuid": "^11.1.0"
 	},
 	"devDependencies": {
 		"nodemon": "^3.1.9"

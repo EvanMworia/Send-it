@@ -58,7 +58,7 @@ export default function Delivery() {
 is
                 if (data.success) {
                     alert("Parcel created successfully!");
-                    window.location.href = "/dashboard";
+                    window.location.href = "/";
                 } else {
                     alert("Payment verification failed!");
                 }

@@ -12,7 +12,7 @@ const Success = () => {
             try {
                 const response = await axios.get(`http://localhost:4000/parcel/verify-payment?session_id=${sessionId}`);
                 if (response.data.success) {
-                    setTimeout(() => navigate("/dashboard"), 3000);
+                    setTimeout(() => navigate("/"), 3000);
                 }
             } catch (error) {
                 console.error("Payment verification failed:", error);

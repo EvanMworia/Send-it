@@ -2,6 +2,8 @@ import { validateParcel, validateDelete, validateStatus } from '../models/parcel
 import { DbHelper } from '../Database/DbHelper.js';
 import Stripe from 'stripe';
 import fetch from 'node-fetch'; // Ensure this is installed
+import { notifyParcelRecepient, notifyParcelSender } from '../services/emailService.js';
+import { sendSMSToRecepient } from '../services/smsService.js';
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const db =new DbHelper();
 
@@ -139,6 +141,9 @@ const verifyPayment = async (req, res) => {
         });
 
         res.status(200).json({ success: true, message: "Parcel created successfully", results });
+		notifyParcelRecepient(session.metadata.senderEmail, session.metadata.receiverEmail, session.metadata.PickupLocation);
+		notifyParcelSender(session.metadata.senderEmail, session.metadata.receiverEmail, session.metadata.PickupLocation);
+		//sendSMSToRecepient(session.metadata.senderEmail, session.metadata.receiverPhone, session.metadata.PickupLocation);
     } catch (error) {
         console.error("Error verifying payment:", error);
         res.status(500).json({ success: false, message: "Internal server error", error: error.message });
@@ -205,11 +210,9 @@ async function getParcelById(req, res) {
 		});
 	}
 }
-
 async function updateParcel(req, res) {
 	try {
 		console.log('Request Body:', req.body);
-
 		// Validate input data
 		const { error, value } = validateStatus(req.body);
 		if (error) {
@@ -220,45 +223,26 @@ async function updateParcel(req, res) {
 			});
 		}
 
-		const { parcelId, status } = value;
+		const { ParcelID, status } = value;
 
-		// Ensure parcelId is provided
-		if (!parcelId) {
-			return res.status(400).json({
-				success: false,
-				message: 'Parcel ID is required for updating.',
-			});
-		}
-
-		// Execute the stored procedure to update status only
+		// Execute the stored procedure to update status
 		let results = await db.executeProcedure('UpsertParcel', {
-			ParcelID: parcelId,
-			SenderEmail: null, // Not needed for update
-			SenderPhone: null, // Not needed for update
-			ReceiverEmail: null, // Not needed for update
-			ReceiverPhone: null, // Not needed for update
-			SendingLocation: null, // Not needed for update
-			PickupLocation: null, // Not needed for update
-			Status: status,
-			Price: null, // Not needed for update
-			Session: null, // Not needed for update
+			ParcelID: ParcelID,
+            SenderEmail: null,
+            SenderPhone: null,
+            ReceiverEmail: null,
+            ReceiverPhone: null,
+            SendingLocation: null,
+            PickupLocation: null,
+            Status: status,
+            Price: null,
+            Session: null,
 		});
-
-		console.log('Procedure Result:', results);
-
-		// Check if the update was successful
-		if (results.rowsAffected && results.rowsAffected[0] > 0) {
-			res.status(200).json({
-				success: true,
-				message: `Parcel status updated to ${status}.`,
-			});
-			sendUpdateEmail(parcelId, status);
-		} else {
-			res.status(404).json({
-				success: false,
-				message: 'Parcel not found or status update failed.',
-			});
-		}
+		res.status(201).json({
+			success: true,
+			message: 'Parcel updated successfully',
+		});
+		
 	} catch (error) {
 		console.error('Error updating parcel status:', error);
 		res.status(500).json({
@@ -268,7 +252,6 @@ async function updateParcel(req, res) {
 		});
 	}
 }
-
 
 async function deleteParcel(req, res) {
 	try {
@@ -284,24 +267,15 @@ async function deleteParcel(req, res) {
 			});
 		}
 
-		const { parcelId } = value;
+		const { ParcelID } = value;
 
 		// Execute the stored procedure for soft deletion
-		let results = await db.executeProcedure('SoftDeleteParcel', { ParcelID: parcelId });
+		let results = await db.executeProcedure('SoftDeleteParcel', { ParcelID });
 
-		console.log('Procedure Result:', results);
-
-		if (results.rowsAffected[0] > 0) {
-			res.status(200).json({
-				success: true,
-				message: 'Parcel has been soft deleted.',
-			});
-		} else {
-			res.status(404).json({
-				success: false,
-				message: 'Parcel not found or already deleted.',
-			});
-		}
+		res.status(201).json({
+			success: true,
+			message: 'Parcel deleted successfully',
+		});
 	} catch (error) {
 		console.error('Error deleting parcel:', error);
 		res.status(500).json({

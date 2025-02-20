@@ -1,12 +1,13 @@
 import { DbHelper } from '../Database Helper/dbHelper.js';
 import { registerUserSchema } from '../utils/validation.js';
-import { v4 as uid } from 'uuid';
+
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import path from 'path';
 import dotenv from 'dotenv';
 import { fileURLToPath } from 'url'; //HELPER TO LOCATE OUR POSITION OF DB.JS
 import { sendWelcomeEmail } from '../services/emailService.js';
+import { send } from 'process';
 
 //GETTING OUR CURRENT LOCATION(of the file (in this case db.js))
 const __filename = fileURLToPath(import.meta.url);
@@ -16,47 +17,50 @@ const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 const db = new DbHelper();
-
 export async function registerNewUser(req, res) {
-	try {
-		//validate the request body against the defined schema
-		const { error } = registerUserSchema.validate(req.body);
-		//if any error in matters validation, stop execution and infor user of the error.
-		if (error) {
-			return res.status(400).json({ message: `${error.message}` });
-		}
+    try {
+        const { error } = registerUserSchema.validate(req.body);
+        if (error) {
+            return res.status(400).json({ message: `${error.message}` });
+        }
 
-		//if validation is valid, extract the things we need from the body
-		const { FullName, Email, Password, ProfilePicture, Phone, Role } = req.body;
+        const { FullName, Email, Password, ProfilePicture, Phone, Role } = req.body;
 
-		const existingEmail = await db.executeProcedure('GetUserByEmail', { Email: Email });
-		console.log(existingEmail);
+        // Check if the email already exists
+        const existingEmail = await db.executeProcedure('GetUserByEmail', { Email });
+        if (existingEmail.length > 0) {
+            return res.status(400).json({ message: 'Email is already in use' });
+        }
 
-		if (existingEmail.length > 0) {
-			return res.status(400).json({ message: 'Email is already in use' });
-		}
-		const UserID = uid();
-		const hashedPassword = await bcrypt.hash(Password, 10);
-		console.log(hashedPassword);
+        // Hash password
+        const hashedPassword = await bcrypt.hash(Password, 10);
 
-		await db.executeProcedure('UpsertUser', {
-			UserID,
-			FullName,
-			Email,
-			PasswordHash: hashedPassword,
-			ProfilePicture,
-			Phone,
-			Role,
-		});
-		res.status(201).json({
-			message: `User ${FullName} has been created successfully`,
-		});
-		sendWelcomeEmail(Email, FullName);
-	} catch (error) {
-		console.error('Error happened ', error);
-		res.status(500).json({ message: 'Server Error' });
-	}
+        // Execute stored procedure and retrieve the new UserID
+        const result = await db.executeProcedure('UpsertUser', {
+            FullName,
+            Email,
+            PasswordHash: hashedPassword,
+            ProfilePicture,
+            Phone,
+            Role,
+        });
+
+        // Extract the UserID from the result
+        const NewUserID = result.recordset?.[0]?.NewUserID;
+
+        res.status(201).json({
+            message: `User ${FullName} has been created successfully`,
+            UserID: NewUserID, // Return the generated UserID
+        });
+
+        sendWelcomeEmail(Email, FullName);
+		//sendWelcomeSMS(Phone, FullName);
+    } catch (error) {
+        console.error('Error happened ', error);
+        res.status(500).json({ message: 'Server Error' });
+    }
 }
+
 // export async function login(req, res) {
 // 	const { Email, Password } = req.body;
 // 	const userFound = (await db.executeProcedure('GetUserByEmail', { Email })).recordset;

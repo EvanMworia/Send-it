@@ -21,6 +21,7 @@ import AdminHistory from "./components/AdminPages/AdminHistory/AdminHistory";
 import Status from "./components/AdminPages/StatusUpdate/Status";
 import Delete from "./components/AdminPages/Delete/Delete";
 import AdminRoute from "./components/AdminRoute/AdminRoute";
+import Map from "./components/Map/map";
 
 function App() {
   const { theme, toggleTheme } = useContext(ThemeContext);
@@ -41,6 +42,7 @@ function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="*" element={<PageNotFound />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/map" element={<Map/>} />
             <Route path="/login" element={<Login />} />
             <Route path="/history" element={<History />} />
             <Route path="/success" element={<Success />} />
