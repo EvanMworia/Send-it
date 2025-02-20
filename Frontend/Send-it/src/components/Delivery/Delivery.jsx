@@ -1,201 +1,102 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import Select from "react-select";
-import { useNavigate } from "react-router-dom";
-import "./Delivery.css";
-import { stat } from "fs";
+import { useState, useEffect } from "react";
+import './Delivery.css';
 
-const Delivery = () => {
-  const [formData, setFormData] = useState({
- 
-    senderEmail: "",
-    receiverEmail: "",
-    sendingLocation: "",
-    pickupLocation: ""
-  });
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [successMessage, setSuccessMessage] = useState(null);
-  const navigate = useNavigate();
-  const majorTowns = [
-    'Nairobi', 'Mombasa', 'Kisumu', 'Nakuru', 'Eldoret',
-    'Thika', 'Malindi', 'Kitale', 'Garissa', 'Nyeri'
-  ];
-  
+export default function Delivery() {
+    const [formData, setFormData] = useState({
+        senderEmail: "",
+        senderPhone: "",
+        receiverEmail: "",
+        receiverPhone: "",
+        SendingLocation: "",
+        PickupLocation: ""
+    });
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const loggedInUser = JSON.parse(localStorage.getItem("user"));
-        const token = loggedInUser.token;
-
-        const response = await axios.get(
-          "http://localhost:4000/users/getAllUsers",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        setUsers(response.data.filter((user) => user.Role === "User"));
-      } catch (error) {
-        setError("Error fetching users");
-      }
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    fetchUsers();
-  }, []);
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError(null);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
+        try {
+            console.log('formdata is', formData);
+            const response = await fetch("http://localhost:4000/parcel/parcels", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData)
+            });
 
-  const handleSelectChange = (selectedOption, actionMeta) => {
-    const { name } = actionMeta;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: selectedOption ? selectedOption.value : "",
-    }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-    setSuccessMessage(null);
-
-    try {
-      const loggedInUser = JSON.parse(localStorage.getItem("user"));
-      const token = loggedInUser.token;
-
-      const response = await axios.post(
-        "http://localhost:4000/parcel/parcels",
-        {
-          ...formData,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+            console.log('response is', response);
+            const data = await response.json();
+            if (data.success) {
+                window.location.href = data.stripeUrl; // Redirect to Stripe checkout
+            } else {
+                setError(data.message);
+            }
+        } catch (err) {
+            setError("Error creating parcel: " + err.message);
+        } finally {
+            setLoading(false);
         }
-      );
-      if (response.status === 201) {
-        setSuccessMessage("Parcel created successfully!");
-        setFormData({
-          senderId: "",
-          receiverId: "",
-          sendingLocation: "",
-          pickupLocation: "",
-          status: "Pending",
-        });
-        setTimeout(() => {
-          navigate("/dashboard");
-        }, 500);
-      }
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
 
-  const userOptions = users.map((user) => ({
-    value: user.Email,
-    label: user.FullName,
-  }));
+    useEffect(() => {
+        const verifySession = async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const sessionId = urlParams.get("session_id");
 
-  return (
-    <section className="delivery-section">
-      <div className="delivery-container">
-        <h2>Create Parcel Delivery</h2>
-        {error && <p className="error-message">{error}</p>}
-        {successMessage && <p className="success-message">{successMessage}</p>}
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label>Sender:</label>
-            <Select
-              name="senderEmail"
-              value={userOptions.find(
-                (option) => option.value === formData.senderEmail
-              )}
-              onChange={handleSelectChange}
-              options={userOptions}
-              isClearable
-              placeholder="Select Sender"
-              required
-            />
-          </div>
-          <div>
-            <label>Receiver:</label>
-            <Select
-              name="receiverEmail"
-              value={userOptions.find(
-                (option) => option.value === formData.receiverEmail
-              )}
-              onChange={handleSelectChange}
-              options={userOptions}
-              isClearable
-              placeholder="Select Receiver"
-              required
-            />
-          </div>
-          <div>
-            <label>Sending Location:</label>
-            <select
-              name="sendingLocation"
-              value={formData.sendingLocation}
-              onChange={handleInputChange}
-              required
-            >
-              <option value="">Select Location</option>
-              {majorTowns.map((town) => (
-                <option key={town} value={town}>
-                  {town}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label>Pickup Location:</label>
-            <select
-              name="pickupLocation"
-              value={formData.pickupLocation}
-              onChange={handleInputChange}
-              required
-            >
-              <option value="">Select Location</option>
-              {majorTowns.map((town) => (
-                <option key={town} value={town}>
-                  {town}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label>Status:</label>
-            <select
-              name="status"
-              value={formData.status}
-              onChange={handleInputChange}
-              required
-            >
-              <option value="Pending">Pending</option>
-              <option value="In Transit">In Transit</option>
-              <option value="Delivered">Delivered</option>
-            </select>
-          </div>
-          <button type="submit" disabled={loading}>
-            {loading ? "Creating..." : "Create Parcel"}
-          </button>
-        </form>
-      </div>
-    </section>
-  );
-};
+            if (!sessionId) return;
 
-export default Delivery;
+            try {
+                const response = await fetch(`http://localhost:4000/parcel/verify-payment?session_id=${sessionId}`);
+                console.log("response ", response);
+                const data = await response.json();
+is
+                if (data.success) {
+                    alert("Parcel created successfully!");
+                    window.location.href = "/dashboard";
+                } else {
+                    alert("Payment verification failed!");
+                }
+            } catch (err) {
+                console.error("Error verifying payment:", err);
+            }
+        };
+
+        verifySession();
+    }, []);
+
+    return (
+        <div className="delivery-container">
+            <h2>Create a Parcel</h2>
+            {error && <p className="error-message">{error}</p>}
+            <form onSubmit={handleSubmit}>
+                <label>Sender Email</label>
+                <input type="email" name="senderEmail" placeholder="Sender Email" value={formData.senderEmail} onChange={handleChange} required />
+
+                <label>Sender Phone</label>
+                <input type="text" name="senderPhone" placeholder="Sender Phone" value={formData.senderPhone} onChange={handleChange} required />
+
+                <label>Receiver Email</label>
+                <input type="email" name="receiverEmail" placeholder="Receiver Email" value={formData.receiverEmail} onChange={handleChange} required />
+
+                <label>Receiver Phone</label>
+                <input type="text" name="receiverPhone" placeholder="Receiver Phone" value={formData.receiverPhone} onChange={handleChange} required />
+
+                <label>Sending Location</label>
+                <input type="text" name="SendingLocation" placeholder="Sending Location" value={formData.SendingLocation} onChange={handleChange} required />
+
+                <label>Pickup Location</label>
+                <input type="text" name="PickupLocation" placeholder="Pickup Location" value={formData.PickupLocation} onChange={handleChange} required />
+
+                <button type="submit" disabled={loading}>
+                    {loading ? "Processing..." : "Create Parcel"}
+                </button>
+            </form>
+        </div>
+    );
+}

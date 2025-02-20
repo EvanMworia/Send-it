@@ -2,7 +2,7 @@
 
 // const { getAllParcels, getParcelById, createParcel, updateParcel, deleteParcel,getUserParcels, getUsersReceivingParcels, getUsersSendingParcels } = require('../controllers/parcelController');
 import express from 'express';
-import { getAllParcels, getParcelById, createParcel, updateParcel, deleteParcel,getUserParcels, getUsersReceivingParcels, getUsersSendingParcels } from '../controllers/parcelController.js';
+import { getAllParcels, getParcelById, createParcel, updateParcel, deleteParcel,getUserParcels, getUsersReceivingParcels, getUsersSendingParcels,verifyPayment } from '../controllers/parcelController.js';
 
  const parcelRouter= express.Router();
 
@@ -12,6 +12,7 @@ import { getAllParcels, getParcelById, createParcel, updateParcel, deleteParcel,
 parcelRouter.get('/parcels', getAllParcels);
 parcelRouter.get('/parcels/:id', getParcelById);
 parcelRouter.post('/parcels', createParcel);
+parcelRouter.get('/verify-payment', verifyPayment);
 parcelRouter.put('/parcels/update', updateParcel);
 parcelRouter.put('/parcels/:parcelId', deleteParcel);
 

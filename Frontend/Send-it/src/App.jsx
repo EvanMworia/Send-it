@@ -14,6 +14,8 @@ import Notification from "./components/Notification/Notification";
 import Profile from "./components/Profile/Profile";
 import Location from "./components/Location/Location";
 import Delivery from "./components/Delivery/Delivery";
+import Fail from "./components/Stripe/fail";
+import Success from "./components/Stripe/success";
 import Process from "./components/AdminPages/Process/Process";
 import AdminHistory from "./components/AdminPages/AdminHistory/AdminHistory";
 import Status from "./components/AdminPages/StatusUpdate/Status";
@@ -41,6 +43,8 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
             <Route path="/history" element={<History />} />
+            <Route path="/success" element={<Success />} />
+            <Route path="/fail" element={<Fail />} />
             <Route path="/notification" element={<Notification />} />
             <Route path="/delivery" element={<Delivery />} />
             <Route path="/location" element={<Location />} />

@@ -16,7 +16,7 @@ const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 const db = new DbHelper();
-console.log('shdddd', process.env.JWT_SECRET);
+
 export async function registerNewUser(req, res) {
 	try {
 		//validate the request body against the defined schema
@@ -39,7 +39,7 @@ export async function registerNewUser(req, res) {
 		const hashedPassword = await bcrypt.hash(Password, 10);
 		console.log(hashedPassword);
 
-		await db.executeProcedure('CreateNewUser', {
+		await db.executeProcedure('UpsertUser', {
 			UserID,
 			FullName,
 			Email,

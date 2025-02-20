@@ -129,16 +129,17 @@ const Sidebar = () => {
                 </NavLink>
               </li>
             )}
-            {user?.Role === 'User' && (
-              <li className="menu-item">
-                <NavLink to="/delivery" className="menu-link" activeclassname="active">
-                  <span className="menu-link-icon">
-                    <MdOutlineShoppingBag size={18} />
-                  </span>
-                  <span className="menu-link-text">Delivery Form</span>
-                </NavLink>
-              </li>
+           {(user?.Role === 'User' || user?.Role === 'Admin') && (
+           <li className="menu-item">
+              <NavLink to="/delivery" className="menu-link" activeClassName="active">
+               <span className="menu-link-icon">
+                <MdOutlineShoppingBag size={18} />
+              </span>
+                <span className="menu-link-text">Delivery Form</span>
+               </NavLink>
+            </li>
             )}
+
             {user?.Role === 'Admin' && (
               <li className="menu-item">
                 <NavLink to="/processing" className="menu-link" activeclassname="active">

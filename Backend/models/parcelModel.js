@@ -8,19 +8,27 @@ const majorTowns = [
 
 // Parcel Schema
 const parcelSchema = Joi.object({
-    senderId: Joi.string().uuid().required().messages({
-        'string.empty': 'Sender ID is required.',
-        'string.guid': 'Sender ID must be a valid UUID.',
+    senderEmail: Joi.string().email().required().messages({
+        'string.empty': 'Sender email is required.',
+        'string.email': 'Sender email must be a valid email address.',
     }),
-    receiverId: Joi.string().uuid().required().messages({
-        'string.empty': 'Receiver ID is required.',
-        'string.guid': 'Receiver ID must be a valid UUID.',
+    senderPhone: Joi.string().pattern(/^\+?[0-9]{7,15}$/).required().messages({
+        'string.empty': 'Sender phone number is required.',
+        'string.pattern.base': 'Sender phone must be a valid phone number.',
     }),
-    sendingLocation: Joi.string().valid(...majorTowns).required().messages({
+    receiverEmail: Joi.string().email().required().messages({
+        'string.empty': 'Receiver email is required.',
+        'string.email': 'Receiver email must be a valid email address.',
+    }),
+    receiverPhone: Joi.string().pattern(/^\+?[0-9]{7,15}$/).required().messages({
+        'string.empty': 'Receiver phone number is required.',
+        'string.pattern.base': 'Receiver phone must be a valid phone number.',
+    }),
+    SendingLocation: Joi.string().valid(...majorTowns).required().messages({
         'any.only': `Sending location must be one of: ${majorTowns.join(', ')}.`,
         'string.empty': 'Sending location is required.'
     }),
-    pickupLocation: Joi.string().valid(...majorTowns).required().messages({
+    PickupLocation: Joi.string().valid(...majorTowns).required().messages({
         'any.only': `Pickup location must be one of: ${majorTowns.join(', ')}.`,
         'string.empty': 'Pickup location is required.'
     }),
@@ -30,7 +38,15 @@ const parcelSchema = Joi.object({
         .messages({
             'any.only': 'Status must be one of Pending, In Transit, Delivered, or Picked.',
         }),
+    price: Joi.number().positive().required().messages({
+        'number.base': 'Price must be a number.',
+        'number.positive': 'Price must be greater than zero.',
+    }),
+    sessionId: Joi.string().required().messages({
+        'string.empty': 'Stripe session ID is required.',
+    }),
 });
+
 
 // Validate function
 const validateParcel = (parcel) => parcelSchema.validate(parcel, { abortEarly: false });

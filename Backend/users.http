@@ -1,10 +1,10 @@
-POST http://localhost:5000/users/registerUser
+POST http://localhost:4000/users/registerUser
 Content-Type: application/json
 
 {
-    "FullName":"Evan",
-    "Email":"evannji99@gmail.com",
-    "Password":"Test@2024",
+    "FullName":"Brian Kyalo",
+    "Email":"admin@sendit.com",
+    "Password":"Admin",
     "ProfilePicture": "sbcbjs",
     "Phone": "sncis",
     "Role": "Admin" 
