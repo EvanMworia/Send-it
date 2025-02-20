@@ -14,7 +14,7 @@ parcelRouter.get('/parcels/:id', getParcelById);
 parcelRouter.post('/parcels', createParcel);
 parcelRouter.get('/verify-payment', verifyPayment);
 parcelRouter.put('/parcels/update', updateParcel);
-parcelRouter.put('/parcels/:parcelId', deleteParcel);
+parcelRouter.put('/parcels/:id', deleteParcel);
 
 
 parcelRouter.get('/parcels/user/:userId',getUserParcels);

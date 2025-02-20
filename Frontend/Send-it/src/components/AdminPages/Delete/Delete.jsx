@@ -33,7 +33,7 @@ const Delete = () => {
     setError(null);
 
     try {
-      await axios.delete(`http://localhost:4000/parcel/parcels/${ParcelID}`);
+      await axios.put(`http://localhost:4000/parcel/parcels/${ParcelID}`);
       navigate('/dashboard');
     } catch (error) {
       setError('Error deleting parcel');

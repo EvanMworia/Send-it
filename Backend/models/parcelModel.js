@@ -75,7 +75,7 @@ export { validateStatus };
 
 
 const deleteSchema = Joi.object({
-    parcelId: Joi.string().uuid().required().messages({
+    parcelId: Joi.required().messages({
         "string.empty": "Parcel ID is required.",
         "string.guid": "Parcel ID must be a valid UUID.",
     }),

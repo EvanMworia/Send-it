@@ -214,16 +214,18 @@ async function updateParcel(req, res) {
 	try {
 		console.log('Request Body:', req.body);
 		// Validate input data
-		const { error, value } = validateStatus(req.body);
-		if (error) {
-			return res.status(400).json({
-				success: false,
-				message: 'Validation failed',
-				errors: error.details.map((err) => err.message),
-			});
-		}
+		// const { error, value } = validateStatus(req.body);
+		// if (error) {
+		// 	return res.status(400).json({
+		// 		success: false,
+		// 		message: 'Validation failed',
+		// 		errors: error.details.map((err) => err.message),
+		// 	});
+		// }
 
-		const { ParcelID, status } = value;
+		const { ParcelID, status } = req.body;
+
+
 
 		// Execute the stored procedure to update status
 		let results = await db.executeProcedure('UpsertParcel', {
@@ -252,39 +254,46 @@ async function updateParcel(req, res) {
 		});
 	}
 }
-
 async function deleteParcel(req, res) {
 	try {
-		console.log('Request Body:', req.body); // Debugging
+		const { id } = req.params; // Extract ParcelID from request parameters
 
-		// Validate input data
-		const { error, value } = validateDelete(req.params);
-		if (error) {
+		if (!id) {
 			return res.status(400).json({
 				success: false,
-				message: 'Validation failed',
-				errors: error.details.map((err) => err.message),
+				message: "Parcel ID is required",
 			});
 		}
 
-		const { ParcelID } = value;
+		// Ensure the ParcelID is properly formatted
+		const ParcelID = id.toUpperCase(); // Normalize to uppercase
+		console.log("Deleting Parcel with ID:", ParcelID);
 
-		// Execute the stored procedure for soft deletion
-		let results = await db.executeProcedure('SoftDeleteParcel', { ParcelID });
+		// Execute stored procedure to soft delete the parcel
+		const results = await db.executeProcedure("SoftDeleteParcel", { ParcelID });
 
-		res.status(201).json({
-			success: true,
-			message: 'Parcel deleted successfully',
-		});
+		// Check the affected rows to confirm deletion
+		if (results.rowsAffected && results.rowsAffected[0] > 0) {
+			return res.status(200).json({
+				success: true,
+				message: "Parcel successfully deleted",
+			});
+		} else {
+			return res.status(404).json({
+				success: false,
+				message: "Parcel not found or already deleted",
+			});
+		}
 	} catch (error) {
-		console.error('Error deleting parcel:', error);
+		console.error("Error deleting parcel:", error);
 		res.status(500).json({
 			success: false,
-			message: 'Internal server error',
+			message: "Internal server error",
 			error: error.message,
 		});
 	}
 }
+
 
 async function getUserParcels(req, res) {}
 
