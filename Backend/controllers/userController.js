@@ -8,6 +8,7 @@ import dotenv from 'dotenv';
 import { fileURLToPath } from 'url'; //HELPER TO LOCATE OUR POSITION OF DB.JS
 import { sendWelcomeEmail } from '../services/emailService.js';
 import { send } from 'process';
+import { sendWelcomeSMS } from '../services/smsService.js';
 
 //GETTING OUR CURRENT LOCATION(of the file (in this case db.js))
 const __filename = fileURLToPath(import.meta.url);
@@ -54,7 +55,8 @@ export async function registerNewUser(req, res) {
         });
 
         sendWelcomeEmail(Email, FullName);
-		//sendWelcomeSMS(Phone, FullName);
+		sendWelcomeSMS(Phone, FullName);
+		
     } catch (error) {
         console.error('Error happened ', error);
         res.status(500).json({ message: 'Server Error' });

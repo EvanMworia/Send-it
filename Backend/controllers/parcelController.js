@@ -2,8 +2,8 @@ import { validateParcel, validateDelete, validateStatus } from '../models/parcel
 import { DbHelper } from '../Database/DbHelper.js';
 import Stripe from 'stripe';
 import fetch from 'node-fetch'; // Ensure this is installed
-import { notifyParcelRecepient, notifyParcelSender } from '../services/emailService.js';
-import { sendSMSToRecepient } from '../services/smsService.js';
+import { notifyParcelRecepient, notifyParcelSender, sendUpdateEmail } from '../services/emailService.js';
+import { sendSMSToRecepient, sendUpdateSMS } from '../services/smsService.js';
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const db =new DbHelper();
 
@@ -54,9 +54,7 @@ const calculatePrice = (distance) => {
 // Create Parcel and Initiate Stripe Payment
 const createParcel = async (req, res) => {
     try {
-        console.log("Received request:", req.body); // Debugging line
-
-  
+        console.log("Received request:", req.body); 
 
         const { senderEmail, senderPhone, receiverEmail, receiverPhone, SendingLocation, PickupLocation } = req.body;
 
@@ -83,7 +81,7 @@ const createParcel = async (req, res) => {
             payment_method_types: ['card'],
             line_items: [{
                 price_data: {
-                    currency: 'usd',
+                    currency: 'kes',
                     product_data: {
                         name: 'Parcel Delivery',
                         description: `Delivery from ${SendingLocation} to ${PickupLocation} (${distance.toFixed(2)} km)`,
@@ -143,7 +141,7 @@ const verifyPayment = async (req, res) => {
         res.status(200).json({ success: true, message: "Parcel created successfully", results });
 		notifyParcelRecepient(session.metadata.senderEmail, session.metadata.receiverEmail, session.metadata.PickupLocation);
 		notifyParcelSender(session.metadata.senderEmail, session.metadata.receiverEmail, session.metadata.PickupLocation);
-		//sendSMSToRecepient(session.metadata.senderEmail, session.metadata.receiverPhone, session.metadata.PickupLocation);
+		sendSMSToRecepient(session.metadata.senderEmail, session.metadata.receiverPhone, session.metadata.PickupLocation);
     } catch (error) {
         console.error("Error verifying payment:", error);
         res.status(500).json({ success: false, message: "Internal server error", error: error.message });
@@ -244,6 +242,19 @@ async function updateParcel(req, res) {
 			success: true,
 			message: 'Parcel updated successfully',
 		});
+		let parcelDetails = await db.executeProcedure('sp_GetParcelByID', { ParcelID: ParcelID });
+		parcelDetails.recordset[0].ReceiverPhone;
+		parcelDetails.recordset[0].SenderEmail;
+		parcelDetails.recordset[0].ReceiverEmail;
+		parcelDetails.recordset[0].PickupLocation;
+		parcelDetails.recordset[0].Status;
+
+
+		
+		//sendSMSToRecepient(parcelDetails.recordset[0].SenderEmail, parcelDetails.recordset[0].ReceiverPhone, parcelDetails.recordset[0].PickupLocation);
+
+		sendUpdateSMS(ParcelID, parcelDetails.recordset[0].SenderEmail, parcelDetails.recordset[0].ReceiverPhone, status);
+		sendUpdateEmail(parcelDetails.recordset[0].SenderEmail, parcelDetails.recordset[0].ReceiverEmail, ParcelID, status);
 		
 	} catch (error) {
 		console.error('Error updating parcel status:', error);

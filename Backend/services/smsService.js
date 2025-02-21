@@ -68,6 +68,23 @@ export async function sendSMSToRecepient(parcelSender, parcelReceipientPhone, pi
 		console.error(ex);
 	}
 }
+export async function sendUpdateSMS(parcelId,parcelSender, parcelReceipientPhone, status) {
+	// TODO: Send message
+	try {
+		const result = await africastalking.SMS.send({
+			// to: process.env.AT_RECEIVER,
+			to: [`${parcelReceipientPhone}`],
+			message: `Parcel Updates.
+				Your parcel ${parcelId} from ${parcelSender} is now ${status}
+				NOTE: Keep this message since we will need you to provide it when you collect your parcel.
+				Thankyou for choosing SendIt
+				Best regards.`,
+		});
+		console.log(result);
+	} catch (ex) {
+		console.error(ex);
+	}
+}
 async function smsServer() {
 	const app = express();
 
@@ -84,7 +101,7 @@ async function smsServer() {
 		console.log(`App running on port: ${port}`);
 
 		// TODO: call sendSMS to send message after server starts
-		// sendSMS();
+		 //sendSMS();
 	});
 }
 

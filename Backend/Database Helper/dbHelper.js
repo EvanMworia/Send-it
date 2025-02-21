@@ -1,5 +1,5 @@
 import mssql from 'mssql';
-import { sqlConfig } from '../config/db.js'; // Import database configuration
+import { sqlConfig } from '../config/db.js'; 
 
 export class DbHelper {
 	constructor() {
@@ -28,13 +28,13 @@ export class DbHelper {
 	 */
 	async executeProcedure(storedProcedure, data) {
 		try {
-			const pool = await this.pool; // Wait for the connection pool to be ready
-			const request = await this.createRequest(pool.request(), data); // Prepare request
-			const results = await request.execute(storedProcedure); // Execute stored procedure
-			return results; // Return the results
+			const pool = await this.pool; 
+			const request = await this.createRequest(pool.request(), data); 
+			const results = await request.execute(storedProcedure); 
+			return results; 
 		} catch (error) {
 			console.error('Error executing stored procedure----------:', error);
-			throw error; // Re-throw error to be handled by caller
+			throw error; 
 		}
 	}
 }

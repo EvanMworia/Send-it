@@ -66,7 +66,7 @@ export async function notifyParcelRecepient(parcelSender, parcelReceipient, pick
 	}
 }
 
-export async function notifyParcelSender(parcelSender, parcelReceipient, parcelId, pickupLocation) {
+export async function notifyParcelSender(parcelSender, parcelReceipient, pickupLocation) {
 	try {
 		await transporter.sendMail({
 			from: `SendIt Team <${process.env.EMAIL_USER}>`,
@@ -98,7 +98,7 @@ export async function sendUpdateEmail(parcelSender, parcelReceipient, parcelId, 
                 <h1>News on your parcel!</h1>
                 <p>Thankyou for choosing SendIt </p>
 				
-                <p>Your parcel ${parcelId}, is now ${status}</p>
+                <p>Your parcel ${parcelId}, is now ${status}</p>				
                 <p>Best regards, <br/>SendIt Team</p>
             `,
 		});
